@@ -65,7 +65,7 @@ export function ImmersiveHero({
       {/* Contenu central */}
       <div className="relative z-20 flex flex-col items-center px-4 py-20 text-center max-w-5xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
@@ -79,7 +79,7 @@ export function ImmersiveHero({
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="mt-6 text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl text-balance"
@@ -90,7 +90,7 @@ export function ImmersiveHero({
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.25 }}
           className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg text-balance"
@@ -105,7 +105,7 @@ export function ImmersiveHero({
 
         {/* Objectifs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3 w-full max-w-3xl"
@@ -130,7 +130,7 @@ export function ImmersiveHero({
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.55 }}
           className="mt-12 flex flex-col gap-3 sm:flex-row"
@@ -156,7 +156,7 @@ export function ImmersiveHero({
 
         {completedCount > 0 && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={false}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
             className="mt-6 text-sm text-muted-foreground"
@@ -172,7 +172,7 @@ export function ImmersiveHero({
       {/* Indicateur de scroll */}
       <motion.button
         onClick={onStart}
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
         className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 text-muted-foreground hover:text-foreground transition-colors"

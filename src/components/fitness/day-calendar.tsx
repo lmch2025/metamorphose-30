@@ -98,7 +98,7 @@ function DayCard({
       type="button"
       onClick={onSelect}
       disabled={isLocked}
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.35 }}
@@ -181,7 +181,7 @@ export function DayCalendar({ completedDays, onSelectDay }: DayCalendarProps) {
       <div className="mx-auto max-w-6xl">
         {/* En-tête de section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
@@ -217,7 +217,7 @@ export function DayCalendar({ completedDays, onSelectDay }: DayCalendarProps) {
             return (
               <motion.div
                 key={phase}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6 }}
@@ -275,7 +275,7 @@ export function DayCalendar({ completedDays, onSelectDay }: DayCalendarProps) {
 
         {/* Légende */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={false}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}

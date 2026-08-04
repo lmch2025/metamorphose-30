@@ -62,6 +62,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen`}
       >
+        {/* Barre de chargement visible immédiatement — cachée quand React hydrate */}
+        <div id="css-loading-bar" className="css-loading-bar" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.addEventListener('load',function(){var b=document.getElementById('css-loading-bar');if(b){setTimeout(function(){b.classList.add('hidden');setTimeout(function(){b.remove();},500);},300);}});`,
+          }}
+        />
         {children}
         <Toaster />
       </body>

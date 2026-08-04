@@ -132,3 +132,36 @@ Stage Summary:
   - WebP servi en priorité via <picture>, JPEG fallback pour très anciens navigateurs
 - Lint : 0 erreur, 0 warning
 - Toutes les interactions vérifiées via Agent Browser : hero, calendrier, lecteur de séance, timer, navigation entre exercices.
+
+---
+Task ID: 12-14
+Agent: Z.ai Code (main orchestrator)
+Task: Corriger le problème "seule l'image hero est visible, le reste ne l'est pas du tout" sur connexion lente.
+
+Diagnostic:
+- L'utilisateur avait des ERR_CONNECTION_RESET sur les chunks JS de Next.js/React/Framer Motion.
+- Tous les composants utilisaient Framer Motion avec `initial={{ opacity: 0, y: 20 }}`.
+- Le HTML serveur était rendu avec `style="opacity: 0"` en inline sur les éléments animés.
+- Si le JS n'arrivait jamais à hydrater (connexion coupée), les éléments restaient à `opacity: 0` → INVISIBLES.
+- Seul le hero utilisait `animate` (qui se déclenche au montage) au lieu de `whileInView`, donc il était visible.
+
+Work Log:
+- Task 12: Retiré `opacity: 0` de TOUS les `initial` props Framer Motion dans les 6 composants de page (immersive-hero, stats-overview, method-showcase, day-calendar, resources-section, site-footer). Le session-player (modale JS-only) a été préservé. Utilisé sed pour remplacer `initial={{ opacity: 0, ... }}` → `initial={{ ... }}` et `initial={{ opacity: 0 }}` → `initial={false}`.
+- Task 13: Ajouté dans globals.css :
+  - Keyframes CSS `css-fade-up` et `css-fade-in` (animations de secours sans JS)
+  - Barre de chargement `.css-loading-bar` (visible immédiatement, cachée quand React hydrate via script inline)
+- Ajouté dans layout.tsx : div `#css-loading-bar` + script inline qui la cache après `window.load`.
+- Vérifié le HTML SSR : 0 occurrence de `opacity: 0` en inline (avant : ~28 occurrences).
+- Vérifié que tout le contenu est présent dans le SSR HTML (Métamorphose, Trois piliers, 30 jours, Fondation, Ressources 3D, etc.).
+- Task 14: Vérification Agent Browser :
+  - Toutes les sections visibles avec hauteurs correctes (hero, stats 519px, method, calendar 1637px, resources 2260px, footer 225px)
+  - 0 erreur console, 0 erreur page
+  - 12/12 images chargées après scroll (0 erreur)
+  - Capturefull-page analysée par VLM : confirme TOUTES les sections visibles, aucune zone noire vide
+  - Lecteur de séance toujours fonctionnel (modale s'ouvre, exercice "Respiration dynamique", image chargée)
+
+Stage Summary:
+- PROBLÈME RÉSOLU : tout le contenu de la page est maintenant visible immédiatement, même si le JavaScript ne charge jamais.
+- Root cause : `opacity: 0` dans les `initial` props de Framer Motion rendait le HTML serveur invisible tant que la hydration JS n'avait pas lieu.
+- Fix : suppression de `opacity: 0` des initial props (le contenu est visible par défaut), conservation des animations de transform (slide-up) qui s'activent quand JS charge.
+- Bonus : barre de chargement CSS visible immédiatement, cachée automatiquement après hydration.

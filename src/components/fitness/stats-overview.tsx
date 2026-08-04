@@ -120,7 +120,7 @@ export function StatsOverview({
     <section className="relative w-full px-4 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
@@ -145,7 +145,7 @@ export function StatsOverview({
               {stats.map((s, i) => (
                 <motion.div
                   key={s.key}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -167,7 +167,7 @@ export function StatsOverview({
 
           {totalMinutes > 0 && (
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={false}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}

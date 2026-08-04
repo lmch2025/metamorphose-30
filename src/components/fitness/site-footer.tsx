@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="mt-auto border-t border-white/5 bg-background/60 backdrop-blur-sm">
       <div className="mx-auto max-w-6xl px-4 py-8">
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={false}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="flex flex-col items-center gap-4 text-center"

@@ -86,7 +86,7 @@ export function MethodShowcase() {
       <div className="mx-auto max-w-6xl">
         {/* En-tête */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
@@ -115,7 +115,7 @@ export function MethodShowcase() {
           {pillars.map((p, i) => (
             <motion.div
               key={p.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
@@ -167,7 +167,7 @@ export function MethodShowcase() {
 
         {/* Structure d'une séance 5 min */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6 }}
@@ -214,7 +214,7 @@ export function MethodShowcase() {
 
         {/* Galerie d'illustrations */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6 }}
@@ -235,7 +235,7 @@ export function MethodShowcase() {
             {galleryImages.map((img, i) => (
               <motion.div
                 key={img.name}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}

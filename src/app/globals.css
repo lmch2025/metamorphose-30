@@ -236,3 +236,41 @@
 .text-balance {
   text-wrap: balance;
 }
+
+/* ===== ANIMATIONS CSS DE SECOURS (fonctionnent sans JavaScript) ===== */
+/* Ces animations se déclenchent immédiatement au chargement de la page,
+   même si les chunks JS de Framer Motion n'arrivent jamais à se charger. */
+@keyframes css-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes css-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Barre de chargement en haut de page — visible immédiatement, cachée quand React hydrate */
+.css-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 9999;
+  background: linear-gradient(
+    90deg,
+    oklch(0.72 0.17 155),
+    oklch(0.78 0.15 75),
+    oklch(0.65 0.22 15)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  transition: opacity 0.4s;
+}
+.css-loading-bar.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Contenu visible par défaut — Framer Motion override avec inline styles quand JS charge */
+/* Si JS ne charge jamais, tout le contenu reste visible */
