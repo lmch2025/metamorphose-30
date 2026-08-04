@@ -1,0 +1,594 @@
+{
+  "Mixamo free 3D character animations exercise": [
+    {
+      "url": "https://www.mixamo.com",
+      "name": "Mixamo",
+      "snippet": "Bring your projects to life with 3D characters, skeletal rigs, and animations , ready for use in film, games, interactive experiences and illustration.\nEmpowering creativity with animated 3D characters. Bring your projects to life with 3D characters, skeletal rigs, and animations, ready for use in film, games, interactive experiences and illustration.",
+      "host_name": "www.mixamo.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.reddit.com/r/gamedev/comments/17koklk/what_do_you_think_about_mixamo",
+      "name": "What do you think about Mixamo? : r/gamedev",
+      "snippet": "We just started the animation pipeline development for our game using the Mixamo library. Rn, we just have the basic actions. Next, we’ll integrate them ...",
+      "host_name": "www.reddit.com",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.adobe.com/products/substance3d/plugins/mixamo-in-blender.html",
+      "name": "Mixamo Blender add-on - Adobe Substance 3D",
+      "snippet": "Mixamo is a web-based service for 3D character animation , which uses machine learning methods to automate the animation process. Explore the power of characters ...",
+      "host_name": "www.adobe.com",
+      "rank": 2,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://rebusfarm.net/blog/how-to-use-mixamo-with-blender-full-beginner-guide",
+      "name": "How to Use Mixamo with Blender: Full Beginner Guide",
+      "snippet": "Jul 30, 2025 — Mixamo is your new best friend. With its free library of rigged characters and motion-capture animations, Mixamo lets you generate production- ...",
+      "host_name": "rebusfarm.net",
+      "rank": 3,
+      "date": "Jul 30, 2025",
+      "favicon": ""
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Mixamo",
+      "name": "Mixamo",
+      "snippet": "a 3D computer graphics technology company . Based in San Francisco, the company develops and sells web-based services for 3D character animation.",
+      "host_name": "en.wikipedia.org",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://garagefarm.net/blog/creating-mixamo-animations-with-blender",
+      "name": "Creating Mixamo Animations with Blender",
+      "snippet": "Mixamo, a web-based service by Adobe, provides a vast library of pre-made animations that can be easily applied to 3D models.",
+      "host_name": "garagefarm.net",
+      "rank": 5,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/tags/mixamo",
+      "name": "Mixamo 3D models",
+      "snippet": "Mixamo 3D models ready to view and download for free. Popular Mixamo 3D models. View all · Francesca De Santis 3D Model · Download 3D model.",
+      "host_name": "sketchfab.com",
+      "rank": 6,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=F25_c-Q0_Qw",
+      "name": "How to Use Mixamo Animations in Blender 4.2",
+      "snippet": "In this tutorial, we'll learn how to create a rigged and animated 3d character using Mixamo add-on for Blender . We also learn how to combine ...",
+      "host_name": "www.youtube.com",
+      "rank": 7,
+      "date": "",
+      "favicon": ""
+    }
+  ],
+  "Sketchfab free 3D exercise models downloadable": [
+    {
+      "url": "https://sketchfab.com/features/free-3d-models",
+      "name": "Download Free 3D Models - Royalty Free",
+      "snippet": "Download free 3D models available under Creative Commons on Sketchfab and license thousands of Royalty-Free 3D models from the Sketchfab Store.",
+      "host_name": "sketchfab.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/tags/exercise",
+      "name": "Exercise 3D models",
+      "snippet": "Exercise 3D models ready to view and download for free. Popular Exercise 3D models. View all · Velocity Pulse – Urban Runner 3D Model. Download 3D model.",
+      "host_name": "sketchfab.com",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/tags/gym",
+      "name": "Gym 3D models",
+      "snippet": "Gym 3D models ready to view and download for free ... Downloadable · Collections · Human Created · AI Generated · Blog · Community members · Sketchfab Masters.\nGym 3D models ready to view and download for free.",
+      "host_name": "sketchfab.com",
+      "rank": 2,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/categories/sports-fitness",
+      "name": "Sports & Fitness 3D models",
+      "snippet": "Sports & Fitness 3D models ready to view and download for free. Popular Sports & Fitness 3D models. View all · Basket Ball Court – Game Ready Asset 3D Model.",
+      "host_name": "sketchfab.com",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/3d-models/gym-equipment-0582bd07f01b49b09b3552553c3467b8",
+      "name": "Gym Equipment - Download Free 3D model by Low Poly",
+      "snippet": "Here are the low poly version of some gym equipment! Quite simply modeled and ready for use! :) Texture Atlas You can download and use it for Free.",
+      "host_name": "sketchfab.com",
+      "rank": 4,
+      "date": "Oct 22, 2023",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/3d-models/game-ready-gym-environment-asset-pack-8aef4a478bbe49d483280968aff59064",
+      "name": "GAME READY GYM ENVIRONMENT ASSET PACK",
+      "snippet": "A downloadable gym environment asset pack. Includes: abdominal_bench; barbell bar; bench; boxing ring (3 various); dumbbell (2 various) ...",
+      "host_name": "sketchfab.com",
+      "rank": 5,
+      "date": "Mar 31, 2026",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/3d-models/anatomy-exercise-3185924ee3c64db1be6184cc40cd212b",
+      "name": "anatomy exercise - Download Free 3D model by verena",
+      "snippet": "Download Free 3D model by verena … link on desktop PC with a VR headset touch & drag to rotate anatomy exercise. Fab Free 3D Models. Sketchfab, ...",
+      "host_name": "sketchfab.com",
+      "rank": 6,
+      "date": "May 14, 2017",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/3d-models/dumbbells-worksout-animation-bundle-vol-1-50160409e7ec4bdba1972ddd4f476f76",
+      "name": "Dumbbells Worksout Animation Bundle Vol. 1 - 3D model",
+      "snippet": "15 unique Dumbbells Worksou animations of exercise Man. Low poly 3d model in flat surface style. 3ds max and FBX file included.",
+      "host_name": "sketchfab.com",
+      "rank": 7,
+      "date": "Sep 30, 2021",
+      "favicon": ""
+    }
+  ],
+  "free 3D fitness animation models online viewer": [
+    {
+      "url": "https://sketchfab.com",
+      "name": "Sketchfab - The best 3D viewer on the web",
+      "snippet": "The most powerful 3D editor online . Set up lighting, materials, animation , audio, annotations, VR positioning, and more. Free 3D Models",
+      "host_name": "sketchfab.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.meshy.ai/tags/fitness",
+      "name": "Free Fitness 3D Models - Download Instantly",
+      "snippet": "Download 594+ free Fitness 3D models in STL, GLB, FBX, OBJ formats for 3D Printing, Games, Animation and more. Ready to use – instant download on Meshy.\nExplore high-quality Fitness 3D models with Meshy, including popular designs. Download free Fitness 3D models in STL, 3MF, FBX, GLB, OBJ, and USDZ formats for 3D printing, game development, animation, AR/VR, and digital projects.",
+      "host_name": "www.meshy.ai",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.behance.net/gallery/160117423/3D-Gym-Exercise-Animations?locale=en_US",
+      "name": "3D Gym Exercise Animations",
+      "snippet": "Dec 29, 2022 — Under the guidance of an anatomist, we prepared 52 animations for 25 machines, targeting different muscle groups. Read more",
+      "host_name": "www.behance.net",
+      "rank": 2,
+      "date": "Dec 29, 2022",
+      "favicon": ""
+    },
+    {
+      "url": "https://convert3d.org/view",
+      "name": "3D Model Viewer - Inspect Models Online | Convert 3D",
+      "snippet": "This 3D model viewer lets you upload a 3D file (such as STL, OBJ, STEP, and more) and explore it directly in your browser. You can rotate, zoom in, zoom out, , ...",
+      "host_name": "convert3d.org",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://iconscout.com/3d-icons/fitness-model",
+      "name": "Fitness Model 3D Icons - Free Download in PNG, glTF",
+      "snippet": "Browse & download free and premium 10,915 Fitness Model 3D Icons for web or mobile (iOS and Android) design, marketing, or developer projects.",
+      "host_name": "iconscout.com",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.danthree.studio/en/studio-tools/3d-viewer",
+      "name": "Free 3D Viewer Online - Display 3D file in the browser",
+      "snippet": "With our free online 3D viewer , you can view your CAD and 3D files directly in your browser—no additional software or registration required. Read more",
+      "host_name": "www.danthree.studio",
+      "rank": 5,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.cgtrader.com/3d-models/exercise",
+      "name": "Exercise 3D Models – Free & Premium Downloads",
+      "snippet": "3D Exercise models are ready for animation , games and VR / AR projects. Use filters to find rigged, animated, low-poly or free 3D models. Read more",
+      "host_name": "www.cgtrader.com",
+      "rank": 6,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://anatomytool.org/open3dmodel",
+      "name": "Open 3D Model",
+      "snippet": "Open Source and Free 3D Model of Human Anatomy . Created by Anatomists at renowned Universities. Non-commercial, University based. To learn, use and build on. Read more",
+      "host_name": "anatomytool.org",
+      "rank": 7,
+      "date": "",
+      "favicon": ""
+    }
+  ],
+  "Adobe Fuse free character creator": [
+    {
+      "url": "https://store.steampowered.com/app/257400/Fuse",
+      "name": "Fuse on Steam",
+      "snippet": "Fuse is a standalone 3D character creator that enables you to make unique characters to use in your game. Fuse comes with 70+ body parts, 150+ clothing meshes.\nFuse is a standalone 3D character creator that enables you to make unique characters to use in your game. Fuse comes with 70+ body parts, 150+ clothing meshes, 42 dynamic texturing substances, Unlimited free Auto-Rigs and Animations through the Mixamo service (activated Adobe ID required).",
+      "host_name": "store.steampowered.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.adobe.com/ie/products/fuse.html%29",
+      "name": "Create 3D models, characters | Download Adobe Fuse (Beta)",
+      "snippet": "Create 3D human models and characters with Adobe Fuse (Beta). Easily import into Photoshop projects to pose and animate your new characters.\nFor a limited time, Fuse is available as a free beta to Creative Cloud members. Design your own 3D models — no experience needed. See how the new app makes it easy to build, outfit and customise 3D human characters in minutes, save them to your Creative Cloud Libraries and then pose and animate them right inside Photoshop. See all features ›.",
+      "host_name": "www.adobe.com",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://discussions.unity.com/t/fastish-character-creators-since-fuse-is-about-to-be-dead/803812",
+      "name": "Fastish Character Creators Since Fuse is About to be Dead",
+      "snippet": "Aug 9, 2020 — For context, “ Adobe Fuse ” used to be called “Mixamo Fuse”, and it was basically the character creation part of the Mixamo pipeline.",
+      "host_name": "discussions.unity.com",
+      "rank": 2,
+      "date": "Aug 9, 2020",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.facebook.com/groups/3dmodelingandanimation/posts/10157741901610368",
+      "name": "Does anyone use Adobe Fuse for character creation?",
+      "snippet": "Does anyone use Adobe Fuse for character creation?",
+      "host_name": "www.facebook.com",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Adobe_Fuse_CC",
+      "name": "Adobe Fuse CC",
+      "snippet": "Adobe Fuse CC (formerly Fuse Character Creator) was a 3D computer graphics software developed by Mixamo that enables users to create 3D characters.",
+      "host_name": "en.wikipedia.org",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.reddit.com/r/gamedev/comments/2m7sv7/steam_powered_gamedev_fuse_character_creator",
+      "name": "Steam Powered GameDev: Fuse Character Creator reviewed",
+      "snippet": "Fuse is a 3D character generator , It enables you to create humanoid models quickly but with a dizzying number of settings. Fuse comes with 2  ...",
+      "host_name": "www.reddit.com",
+      "rank": 5,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://forums.unrealengine.com/t/fuse-character-creator/3142",
+      "name": "Fuse Character Creator - Epic Developer Community Forums",
+      "snippet": "Apr 23, 2014 — The free version let you to create human like models , the best thing of this “automatic character creation” tool is that the exported models are already rigged ...",
+      "host_name": "forums.unrealengine.com",
+      "rank": 6,
+      "date": "Apr 23, 2014",
+      "favicon": ""
+    },
+    {
+      "url": "https://community.adobe.com/questions-571/fuse-cc-reloaded-253275",
+      "name": "FUSE CC Reloaded",
+      "snippet": "Nov 15, 2022 — As we all know: Adobe spent a lot of effort on Fuse CC back in the days when character creation wasn't turning into economy and stopped Fuse CC right ...",
+      "host_name": "community.adobe.com",
+      "rank": 7,
+      "date": "Nov 15, 2022",
+      "favicon": ""
+    }
+  ],
+  "free exercise form video reference website": [
+    {
+      "url": "https://www.muscleandstrength.com/exercises",
+      "name": "Exercise Video Database - Muscle & Strength",
+      "snippet": "The largest and most comprehensive database of free video exercise guides! Learn how to perform exercises using correct technique. 1500+ Exercises. 390M Video ...",
+      "host_name": "www.muscleandstrength.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.reddit.com/r/bodyweightfitness/comments/145wbfn/i_created_a_website_to_search_through_1000",
+      "name": "I created a website to search through 1000 exercises by muscle",
+      "snippet": "Jun 10, 2023 · You can search by name, find lists of exercises by muscle group, joint movement and possible equipment. The exercises are linked to each other through skill ... Looking for free use exercise library of short (10-15 second) videos... Are there any good sites or youtube channels about the right forms ... More results from www.reddit.com",
+      "host_name": "www.reddit.com",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=bOvwWnFmMic",
+      "name": "FREE Exercise Video Library Built for Fitness Coaches (100% FREE!!!)",
+      "snippet": "Dec 16, 2023 · FREE Exercise Video Library Built for Fitness Coaches (100% FREE!!!) · Comments.",
+      "host_name": "www.youtube.com",
+      "rank": 2,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://gymvisual.com",
+      "name": "Gym visual - Workout animations, GIFs and illustrations",
+      "snippet": "Gym Visual is a powerful platform that provides royalty-free workout animations, GIFs, and fitness illustrations designed for apps, websites, YouTube videos,",
+      "host_name": "gymvisual.com",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://darebee.com/library.html",
+      "name": "Video Exercise Library | DAREBEE",
+      "snippet": "DAREBEE is a non-profit, ad-free and product placement free global fitness resource. How-to videos Monday & Friday. Existing content updated daily.",
+      "host_name": "darebee.com",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.westrive.com/features/exercise-database",
+      "name": "Exercise Photo & Video Database - WeStrive",
+      "snippet": "Enjoy over 1500 exercise photos & videos recorded by the WeStrive Team. Each video comes equipped with a quick example and then full breakdown of the exercise.",
+      "host_name": "www.westrive.com",
+      "rank": 5,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/?srsltid=AfmBOopHWPfwegvxTa1IgQ5ErYwvcB-FoAeKtNSz6Rb35kZLVWQJvSSL",
+      "name": "Exercise Library: Workouts & Fitness Guides - ACE Fitness",
+      "snippet": "Explore the ACE Exercise Library for strength, cardio, and flexibility workouts. Find bodyweight, gym, and home exercises with step-by-step instructions.",
+      "host_name": "www.acefitness.org",
+      "rank": 6,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.precisionnutrition.com/video-exercise-library",
+      "name": "Exercise Library: 400+ Expert Videos with How-To Instructions",
+      "snippet": "This free video exercise library provides expert demonstrations of 400+ exercises with how-to instructions. Plus, you can download a 14-day at-home workout.",
+      "host_name": "www.precisionnutrition.com",
+      "rank": 7,
+      "date": "",
+      "favicon": ""
+    }
+  ],
+  "Bodyweight exercise demonstration free online": [
+    {
+      "url": "https://www.nerdfitness.com/blog/beginner-body-weight-workout-burn-fat-build-muscle",
+      "name": "The Beginner Bodyweight Workout: 20-Minute Routine",
+      "snippet": "Mar 13, 2026 — The best bodyweight workout and exercises for beginners you can do at home . No equipment or gym required. Do this routine 2-4 times a week, ...",
+      "host_name": "www.nerdfitness.com",
+      "rank": 0,
+      "date": "Mar 13, 2026",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=30PqX2zvK88&vl=en",
+      "name": "8 Bodyweight Exercises EVERYONE Should Do! (Hit Every",
+      "snippet": "8 of the best bodyweight exercises to tone and strengthen your muscles at home. Includes beginner, intermediate, and advanced options. NO ...",
+      "host_name": "www.youtube.com",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.nhs.uk/better-health/get-active/home-workout-videos",
+      "name": "Home workout videos",
+      "snippet": "This free exercise plan is a great way to start, or get back to, exercising. A team of fitness instructors will lead you through 30 minute exercise videos, 3 ... Read more",
+      "host_name": "www.nhs.uk",
+      "rank": 2,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://movementlink.fit/beginner-only-bodyweight-exercises-workout-routines-at-home2",
+      "name": "Beginner Only Bodyweight Exercises Workout Routines at Home",
+      "snippet": "On this bodyweight only workout routine blog, I will provide a series of workout routines you can do at home without weights and without equipment. Read more",
+      "host_name": "movementlink.fit",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=etjw96_TrR4",
+      "name": "HOME WORKOUT // FUNCTIONAL BODYWEIGHT TRAINING",
+      "snippet": "FUNCTIONAL BODYWEIGHT TRAINING LEVEL … 40 MIN HYROX INSPIRED WORKOUT. FULL BODY Dumbbell HIIT Workout [NO JUMPING/ ADVANCED]",
+      "host_name": "www.youtube.com",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.womenshealthmag.com/uk/fitness/workouts/g44444509/bodyweight-workout",
+      "name": "28 Best bodyweight workouts, from 5-50 minutes",
+      "snippet": "Jul 5, 2023 — From 5-50 minutes, these are the best bodyweight workout videos on YouTube . No equipment necessary. Get 14 Days free now.",
+      "host_name": "www.womenshealthmag.com",
+      "rank": 5,
+      "date": "Jul 5, 2023",
+      "favicon": ""
+    },
+    {
+      "url": "https://grokker.com/fitness/video/44-best-bodyweight-exercises-ever/510c34e6c7480ab81b001032",
+      "name": "44 Best Bodyweight Exercises Ever! - Fitness and Exercise",
+      "snippet": "Great demonstration of 44 body weight exercises you can do anywhere. Some are simple, like a pushup, but many are very advanced, such as a backflip burpee!",
+      "host_name": "grokker.com",
+      "rank": 6,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.fitnessblender.com/videos",
+      "name": "Workout Videos",
+      "snippet": "Professional full length at home workout videos and progressive exercise programs for free, day pass, and by subscription.",
+      "host_name": "www.fitnessblender.com",
+      "rank": 7,
+      "date": "",
+      "favicon": ""
+    }
+  ],
+  "Daz 3D free models fitness": [
+    {
+      "url": "https://www.daz3d.com/free-weights-gym?srsltid=AfmBOorGbWy5N-jAEjeRNsP_dTWXiUKy5BthvNnKBJCpglnY_tuUuspA",
+      "name": "Free Weights Gym",
+      "snippet": "Free Weights Gym by: Ness Period Reproductions, 3D Models by Daz 3D *Interactive License $35.00. A traditional gym with plenty of equipment for a wide variety ...",
+      "host_name": "www.daz3d.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.daz3d.com/z-fitness-goddess-shape-preset-and-poses-for-genesis-8-female?srsltid=AfmBOooPqkou2_MVF_j6M2YPY84i9lTt_NOBPb4CPir4bHuMpXywYEAx",
+      "name": "Z Fitness Goddess Shape Preset and Poses for Genesis 8",
+      "snippet": "Z Fitness Goddess is a brand new pose collection of Intricate, Sexy Poses and Partials. Free 3D Models . The set includes 20 Base Poses with Mirrors. Fitness ...",
+      "host_name": "www.daz3d.com",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.daz3d.com/forums/discussion/642321/female-fitness-model-character?srsltid=AfmBOoqxLDrmvzHc9TDwAj2n_LT4zLpgC3t0yLVXr--DfhsYmPnDavg3",
+      "name": "Female Fitness Model Character - Daz 3D Forums",
+      "snippet": "Jul 15, 2023 — I am looking for a DAZ character that is 100% in exact likeness to a female bikini fitness model - the models you would see at the beach, gym posing and the ... Read more",
+      "host_name": "www.daz3d.com",
+      "rank": 2,
+      "date": "Jul 15, 2023",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.daz3d.com/fitness-club-bundle?srsltid=AfmBOooRkB7_lL5mnP00jrowC_f_u6tYX63ky9ydgrw9rllgAF4zDbm5",
+      "name": "Fitness Club Bundle",
+      "snippet": "Mega Fitness Club environment sets including 3 different interior scene: Fitness Club, Fitness Club Locker Room, Fitness Club Shower Room. Read more",
+      "host_name": "www.daz3d.com",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.renderhub.com/free-3d-figures",
+      "name": "Download Free Content for Daz Studio",
+      "snippet": "Download Daz content for free at RenderHub . Find characters, clothing, poses, environments, and more. Get free assets for your Daz 3D renders.",
+      "host_name": "www.renderhub.com",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.daz3d.com/forums/discussion/363431/fitness-gallery-show-us-your-daz-fitness-models?srsltid=AfmBOor22nukzK6KvMMU6UEpb8TBzNzw-kiL4uyFfBhRbvMQLnNmc9yn",
+      "name": "Fitness Gallery - Show us your Daz fitness models!",
+      "snippet": "Nov 5, 2019 — A gallery of renders of daz characters made to look like fitness models , both real and fictional. To start it off, here's a pretty realistic depiction of ... Read more",
+      "host_name": "www.daz3d.com",
+      "rank": 5,
+      "date": "Nov 5, 2019",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.renderosity.com/marketplace/products/142523/total-fit-gym",
+      "name": "Total Fit Gym 3D Models TruForm",
+      "snippet": "Workout time at the gym! A large open spaced 'warehouse' design gives the Total Fit Gym that professional look and includes all the equipment you'd need.",
+      "host_name": "www.renderosity.com",
+      "rank": 6,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://zonegfx.com/tag/daz-studio",
+      "name": "DAZ Studio - Free Daz 3D Models - ZoneGfx",
+      "snippet": "DAZ Studio - Free Daz 3D Models . People Clothing & Accessories Hair Animations & Poses Environments & Props … fitness trainer 2 poses for genesis",
+      "host_name": "zonegfx.com",
+      "rank": 7,
+      "date": "",
+      "favicon": ""
+    }
+  ],
+  "free yoga pose 3D model online": [
+    {
+      "url": "https://sketchfab.com/Lily-Yoga3D/models",
+      "name": "3D models by Lily-Yoga Poses (@Lily-Yoga3D)",
+      "snippet": "View 3D models by Lily- Yoga Poses . Yoga Pose : Tittibhasana 3D Model . Trikonasana 3D . Free 3D Models community",
+      "host_name": "sketchfab.com",
+      "rank": 0,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.meshy.ai/tags/yoga",
+      "name": "Free Yoga 3D Models - Download Instantly",
+      "snippet": "Download 116+ free Yoga 3D models in STL, GLB, FBX, OBJ formats for 3D Printing, Games, Animation and more. Ready to use – instant download on Meshy.\nExplore high-quality Yoga 3D models with Meshy, including popular designs. Download free Yoga 3D models in STL, 3MF, FBX, GLB, OBJ, and USDZ formats for 3D printing, game development, animation, AR/VR, and digital projects.",
+      "host_name": "www.meshy.ai",
+      "rank": 1,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.cgtrader.com/3d-models/yoga-pose",
+      "name": "Yoga pose 3D Models – Free & Premium Downloads",
+      "snippet": "Download 12292 free and premium Yoga Pose 3D models , available in MAX, OBJ, games and VR / AR projects. low-poly or free 3D models.",
+      "host_name": "www.cgtrader.com",
+      "rank": 2,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://studio.tripo3d.ai/3d-model-gallery/yoga-pose",
+      "name": "Yoga Pose 3D Models for Free Download and Print | Tripo AI",
+      "snippet": "Free & premium 231 yoga pose 3D models , ready for 3D printing, game development, 3D design, eCommerce, AR/VR and more. View & Download in STL, FBX, GLB, ...\nFree & premium 231 yoga pose 3D models, ready for 3D printing, game development, 3D design, eCommerce, AR/VR and more. View & Download in STL, FBX, GLB, OBJ, USDZ formats.",
+      "host_name": "studio.tripo3d.ai",
+      "rank": 3,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.yeggi.com/q/yoga+poses",
+      "name": "\"yoga poses\" 3D Models to Print",
+      "snippet": "5000+ \"yoga poses\" printable 3D Models . Every Day new 3D Models from all over the World. Click to find the best Results for yoga poses Models for your 3D ...",
+      "host_name": "www.yeggi.com",
+      "rank": 4,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://sketchfab.com/tags/yoga",
+      "name": "Yoga 3D models",
+      "snippet": "Yoga 3D models ready to view and download for free . Popular Yoga 3D models View all Seated Cross-Arm Shoulder Stretch 3D Model. Yoga Tree Pose 3D Model Download\nYoga 3D models ready to view and download for free.",
+      "host_name": "sketchfab.com",
+      "rank": 5,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://free3d.com/premium-3d-models/yoga",
+      "name": "Yoga 3D Models download - Free3D",
+      "snippet": "609 Yoga 3d models found. Available for download in .blend. Free 3D Models . Create free Account or Login. Yoga T- pose 3d model\n609 Yoga 3d models found. Available for download in .blend .obj .c4d .3ds .max .ma and many more formats.",
+      "host_name": "free3d.com",
+      "rank": 6,
+      "date": "",
+      "favicon": ""
+    },
+    {
+      "url": "https://www.turbosquid.com/Search/3D-Models/yoga-character",
+      "name": "Download Free & Premium Yoga Character 3D Models",
+      "snippet": "Explore 539 free and premium yoga character 3D models ready for download to use in animation, games, VR/AR, and a variety of projects.",
+      "host_name": "www.turbosquid.com",
+      "rank": 7,
+      "date": "",
+      "favicon": ""
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Suivi de progression de l'utilisateur sur le programme 30 jours
+model DayProgress {
+  /// Numéro du jour (1-30)
+  day       Int       @id
+  completed Boolean   @default(false)
+  completedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+/// Statistiques globales agrégées
+model UserStats {
+  id           String   @id @default("singleton")
+  totalSessions Int     @default(0)
+  totalMinutes Int      @default(0)
+  currentStreak Int     @default(0)
+  longestStreak Int     @default(0)
+  lastSessionDay Int    @default(0)
+  lastSessionDate DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
