@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronDown, Sparkles, Flame, Dumbbell, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { OptimizedImage } from "@/components/fitness/optimized-image";
 
 interface ImmersiveHeroProps {
   onStart: () => void;
@@ -41,11 +42,12 @@ export function ImmersiveHero({
     <section className="relative min-h-[100svh] w-full overflow-hidden flex items-center justify-center">
       {/* Image de fond avec effet Ken Burns */}
       <div className="absolute inset-0 z-0">
-        { }
-        <img
-          src="/images/hero-immersive.jpg"
+        <OptimizedImage
+          name="hero-immersive"
           alt="Sanctuaire de bien-être zen au lever du soleil"
-          className="h-full w-full object-cover animate-ken-burns"
+          eager
+          wrapperClassName="absolute inset-0 h-full w-full"
+          className="animate-ken-burns"
         />
         {/* Overlay dégradé immersif */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />

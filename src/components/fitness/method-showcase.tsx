@@ -11,12 +11,13 @@ import {
   Eye,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { OptimizedImage } from "@/components/fitness/optimized-image";
 
 const pillars = [
   {
     icon: Sparkles,
     title: "Affiner le visage",
-    image: "/images/ambient-face.jpg",
+    image: "ambient-face",
     color: "from-rose-500/30 to-pink-500/30",
     accent: "text-rose-300",
     desc: "Yoga facial ciblé : fish face, lion face, élévation du menton… pour tonifier les joues et redessiner l'ovale du visage.",
@@ -25,7 +26,7 @@ const pillars = [
   {
     icon: Flame,
     title: "Brûler du gras",
-    image: "/images/ambient-cardio.jpg",
+    image: "ambient-cardio",
     color: "from-amber-500/30 to-orange-500/30",
     accent: "text-amber-300",
     desc: "Cardio HIIT court et intense : jumping jacks, montées de genoux, mountain climbers… pour déclencher la dépense calorique.",
@@ -39,7 +40,7 @@ const pillars = [
   {
     icon: Dumbbell,
     title: "Tonifier le corps",
-    image: "/images/ambient-tone.jpg",
+    image: "ambient-tone",
     color: "from-emerald-500/30 to-teal-500/30",
     accent: "text-emerald-300",
     desc: "Renforcement au poids du corps : squats, fentes, gainage, pont fessier… pour sculpter un corps ferme et tonique.",
@@ -48,14 +49,14 @@ const pillars = [
 ];
 
 const galleryImages = [
-  { src: "/images/ex-face-fish.jpg", label: "Fish Face", cat: "Visage" },
-  { src: "/images/ex-cardio-jacks.jpg", label: "Jumping Jacks", cat: "Cardio" },
-  { src: "/images/ex-tone-squat.jpg", label: "Squat", cat: "Tonification" },
-  { src: "/images/ex-face-cheek.jpg", label: "Sourire large", cat: "Visage" },
-  { src: "/images/ex-cardio-climbers.jpg", label: "Mountain Climbers", cat: "Cardio" },
-  { src: "/images/ex-tone-plank.jpg", label: "Planche", cat: "Tonification" },
-  { src: "/images/ex-tone-lunge.jpg", label: "Fentes", cat: "Tonification" },
-  { src: "/images/ex-tone-bridge.jpg", label: "Pont fessier", cat: "Tonification" },
+  { name: "ex-face-fish", label: "Fish Face", cat: "Visage" },
+  { name: "ex-cardio-jacks", label: "Jumping Jacks", cat: "Cardio" },
+  { name: "ex-tone-squat", label: "Squat", cat: "Tonification" },
+  { name: "ex-face-cheek", label: "Sourire large", cat: "Visage" },
+  { name: "ex-cardio-climbers", label: "Mountain Climbers", cat: "Cardio" },
+  { name: "ex-tone-plank", label: "Planche", cat: "Tonification" },
+  { name: "ex-tone-lunge", label: "Fentes", cat: "Tonification" },
+  { name: "ex-tone-bridge", label: "Pont fessier", cat: "Tonification" },
 ];
 
 const structure = [
@@ -122,11 +123,11 @@ export function MethodShowcase() {
             >
               {/* Image de fond */}
               <div className="relative aspect-[4/3] overflow-hidden">
-                { }
-                <img
-                  src={p.image}
+                <OptimizedImage
+                  name={p.image}
                   alt={p.title}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  wrapperClassName="absolute inset-0 h-full w-full"
+                  className="transition-transform duration-700 group-hover:scale-110"
                 />
                 <div
                   className={`absolute inset-0 bg-gradient-to-t ${p.color} mix-blend-overlay`}
@@ -233,7 +234,7 @@ export function MethodShowcase() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {galleryImages.map((img, i) => (
               <motion.div
-                key={img.src}
+                key={img.name}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-30px" }}
@@ -241,11 +242,11 @@ export function MethodShowcase() {
                 whileHover={{ y: -4 }}
                 className="group relative aspect-[3/4] overflow-hidden rounded-xl"
               >
-                { }
-                <img
-                  src={img.src}
+                <OptimizedImage
+                  name={img.name}
                   alt={img.label}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  wrapperClassName="absolute inset-0 h-full w-full"
+                  className="transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
                 <div className="absolute bottom-2 left-2 right-2">

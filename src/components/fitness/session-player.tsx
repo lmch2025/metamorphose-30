@@ -26,6 +26,7 @@ import {
   type ExerciseCategory,
 } from "@/lib/program-data";
 import { fitnessResources } from "@/lib/resources-data";
+import { OptimizedImage } from "@/components/fitness/optimized-image";
 import { cn } from "@/lib/utils";
 
 interface SessionPlayerProps {
@@ -329,11 +330,11 @@ export function SessionPlayer({
                     {/* Colonne image + timer */}
                     <div className="relative flex flex-col">
                       <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-auto lg:h-full">
-                        { }
-                        <img
-                          src={current.image ?? "/images/ambient-tone.jpg"}
+                        <OptimizedImage
+                          name={current.image ?? "ambient-tone"}
                           alt={current.name}
-                          className="h-full w-full object-cover"
+                          eager
+                          wrapperClassName="absolute inset-0 h-full w-full"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
 

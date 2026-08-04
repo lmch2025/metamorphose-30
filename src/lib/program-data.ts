@@ -61,7 +61,7 @@ const E = {
     id: 'warm-breath',
     name: 'Respiration dynamique',
     category: 'warmup' as const,
-    image: '/images/ambient-cooldown.jpg',
+    image: 'ambient-cooldown',
     duration: 30,
     description:
       "Échauffement respiratoire pour oxygéner le corps et préparer les muscles.",
@@ -78,7 +78,7 @@ const E = {
     id: 'warm-march',
     name: 'Marche sur place',
     category: 'warmup' as const,
-    image: '/images/ex-cardio-knees.jpg',
+    image: 'ex-cardio-knees',
     duration: 30,
     description: "Marche dynamique sur place pour réveiller tout le corps.",
     instructions: [
@@ -95,7 +95,7 @@ const E = {
     id: 'warm-twist',
     name: 'Rotations du buste',
     category: 'warmup' as const,
-    image: '/images/ambient-tone.jpg',
+    image: 'ambient-tone',
     duration: 30,
     description: "Rotations douces du tronc pour préparer le bas du corps.",
     instructions: [
@@ -113,7 +113,7 @@ const E = {
     id: 'fish-face',
     name: 'Fish Face (joues creusées)',
     category: 'face' as const,
-    image: '/images/ex-face-fish.jpg',
+    image: 'ex-face-fish',
     duration: 40,
     description:
       "Exercice star pour affiner les joues : on creuse les joues en aspirant vers l'intérieur.",
@@ -132,7 +132,7 @@ const E = {
     id: 'cheek-lift',
     name: 'Sourire large (lift de joues)',
     category: 'face' as const,
-    image: '/images/ex-face-cheek.jpg',
+    image: 'ex-face-cheek',
     duration: 40,
     description:
       "Sourire exagéré pour remonter les pommettes et tonifier les joues.",
@@ -150,7 +150,7 @@ const E = {
     id: 'jaw-release',
     name: 'Relâchement de mâchoire',
     category: 'face' as const,
-    image: '/images/ex-face-jaw.jpg',
+    image: 'ex-face-jaw',
     duration: 40,
     description:
       "Mouvement de mâchoire pour affiner l'ovale du visage et relâcher les tensions.",
@@ -168,7 +168,7 @@ const E = {
     id: 'neck-stretch',
     name: 'Étirement du cou',
     category: 'face' as const,
-    image: '/images/ex-face-neck.jpg',
+    image: 'ex-face-neck',
     duration: 40,
     description:
       "Étire le cou pour éliminer le double menton et drainer les joues.",
@@ -186,7 +186,7 @@ const E = {
     id: 'lion-face',
     name: 'Face de lion',
     category: 'face' as const,
-    image: '/images/ex-face-jaw.jpg',
+    image: 'ex-face-jaw',
     duration: 40,
     description:
       "Exercice yoga anti-âge : ouvrir grand la bouche et tirer la langue pour tonifier tout le visage.",
@@ -204,7 +204,7 @@ const E = {
     id: 'chin-lift',
     name: 'Élévation du menton',
     category: 'face' as const,
-    image: '/images/ex-face-neck.jpg',
+    image: 'ex-face-neck',
     duration: 40,
     description:
       "Lève le menton vers le plafond pour cibler le double menton et le cou.",
@@ -222,7 +222,7 @@ const E = {
     id: 'tongue-press',
     name: 'Pression de langue au palais',
     category: 'face' as const,
-    image: '/images/ex-face-fish.jpg',
+    image: 'ex-face-fish',
     duration: 40,
     description:
       "Exercice discret pour affiner la mâchoire : la langue presse le palais.",
@@ -241,7 +241,7 @@ const E = {
     id: 'jumping-jacks',
     name: 'Jumping Jacks',
     category: 'cardio' as const,
-    image: '/images/ex-cardio-jacks.jpg',
+    image: 'ex-cardio-jacks',
     duration: 40,
     description:
       "Le grand classique du cardio : saut écarté bras-jambes pour brûler un max de calories.",
@@ -259,7 +259,7 @@ const E = {
     id: 'high-knees',
     name: 'Montées de genoux',
     category: 'cardio' as const,
-    image: '/images/ex-cardio-knees.jpg',
+    image: 'ex-cardio-knees',
     duration: 40,
     description:
       "Course sur place en montant les genoux à hauteur de hanche : cardio explosif.",
@@ -277,7 +277,7 @@ const E = {
     id: 'mountain-climbers',
     name: 'Mountain Climbers',
     category: 'cardio' as const,
-    image: '/images/ex-cardio-climbers.jpg',
+    image: 'ex-cardio-climbers',
     duration: 40,
     description:
       "Position de planche, genoux alternés vers la poitrine : cardio + abdos explosifs.",
@@ -295,7 +295,7 @@ const E = {
     id: 'squat-jumps',
     name: 'Sauts en squat',
     category: 'cardio' as const,
-    image: '/images/ex-tone-squat.jpg',
+    image: 'ex-tone-squat',
     duration: 40,
     description:
       "Squat explosif avec saut : brûle des calories et tonifie les jambes.",
@@ -313,7 +313,7 @@ const E = {
     id: 'burpees',
     name: 'Burpees simplifiés',
     category: 'cardio' as const,
-    image: '/images/ex-cardio-jacks.jpg',
+    image: 'ex-cardio-jacks',
     duration: 40,
     description:
       "Exercice complet : squat, planche, saut. Version accessible sans pompe complète.",
@@ -331,7 +331,7 @@ const E = {
     id: 'skaters',
     name: 'Patineurs latéraux',
     category: 'cardio' as const,
-    image: '/images/ex-cardio-knees.jpg',
+    image: 'ex-cardio-knees',
     duration: 40,
     description:
       "Sauts latéraux d'un pied sur l'autre comme un patineur : cardio + équilibre.",
@@ -351,7 +351,7 @@ const E = {
     id: 'squat',
     name: 'Squat',
     category: 'tone' as const,
-    image: '/images/ex-tone-squat.jpg',
+    image: 'ex-tone-squat',
     duration: 40,
     description:
       "Roi des exercices : squat pour fessiers, cuisses et force du bas du corps.",
@@ -369,7 +369,7 @@ const E = {
     id: 'plank',
     name: 'Planche (gainage)',
     category: 'tone' as const,
-    image: '/images/ex-tone-plank.jpg',
+    image: 'ex-tone-plank',
     duration: 40,
     description:
       "Gainage statique : corps droit sur les avant-bras. Le meilleur pour la sangle abdominale.",
@@ -387,7 +387,7 @@ const E = {
     id: 'lunge',
     name: 'Fentes',
     category: 'tone' as const,
-    image: '/images/ex-tone-lunge.jpg',
+    image: 'ex-tone-lunge',
     duration: 40,
     description:
       "Fentes alternées pour travailler unilatéralement fessiers et cuisses.",
@@ -405,7 +405,7 @@ const E = {
     id: 'glute-bridge',
     name: 'Pont fessier',
     category: 'tone' as const,
-    image: '/images/ex-tone-bridge.jpg',
+    image: 'ex-tone-bridge',
     duration: 40,
     description:
       "Allongé sur le dos, soulève le bassin pour tonifier fessiers et bas du dos.",
@@ -423,7 +423,7 @@ const E = {
     id: 'pushups',
     name: 'Pompes (adaptées)',
     category: 'tone' as const,
-    image: '/images/ex-tone-plank.jpg',
+    image: 'ex-tone-plank',
     duration: 40,
     description:
       "Pompes sur les genoux ou contre un mur : haut du corps et gainage.",
@@ -441,7 +441,7 @@ const E = {
     id: 'bicycle-crunch',
     name: 'Crunch vélo',
     category: 'tone' as const,
-    image: '/images/ex-tone-bridge.jpg',
+    image: 'ex-tone-bridge',
     duration: 40,
     description:
       "Abdos en mouvement vélo : coudes vers genou opposé pour tout le buste.",
@@ -459,7 +459,7 @@ const E = {
     id: 'wall-sit',
     name: 'Chaise contre un mur',
     category: 'tone' as const,
-    image: '/images/ex-tone-squat.jpg',
+    image: 'ex-tone-squat',
     duration: 40,
     description:
       "Position assise immobile contre un mur : endurance des cuisses.",
@@ -479,7 +479,7 @@ const E = {
     id: 'cool-stretch',
     name: 'Étirement global',
     category: 'cooldown' as const,
-    image: '/images/ambient-cooldown.jpg',
+    image: 'ambient-cooldown',
     duration: 30,
     description:
       "Récupération active : étire tout le corps pour relâcher les tensions.",
@@ -497,7 +497,7 @@ const E = {
     id: 'cool-breath',
     name: 'Respiration apaisante',
     category: 'cooldown' as const,
-    image: '/images/ambient-cooldown.jpg',
+    image: 'ambient-cooldown',
     duration: 30,
     description:
       "Respiration finale pour faire redescendre le rythme cardiaque.",

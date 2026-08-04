@@ -89,3 +89,46 @@ Stage Summary:
 - 12 ressources 3D gratuites curées (Mixamo, Sketchfab, etc.).
 - Persistance Prisma (SQLite) pour la progression et les stats.
 - Toutes les interactions vérifiées via Agent Browser : 0 erreur, flux complet (sélection jour → lecture → complétion → déblocage jour suivant) opérationnel.
+
+---
+Task ID: 8-11
+Agent: Z.ai Code (main orchestrator)
+Task: Optimiser l'app pour connexion internet lente (images ERR_CONNECTION_RESET / ERR_TIMED_OUT).
+
+Work Log:
+- Task 8: Création de `scripts/optimize-images.ts` utilisant sharp pour :
+  - Convertir les 16 JPEG en WebP (qualité 62-68, redimensionnement aux dimensions réelles d'affichage : hero 1600w, ambiances 640w, démos exercices 480w)
+  - Recompresser les JPEG fallback (mozjpeg)
+  - Générer des placeholders flous (LQIP) 20px de large en base64 → `src/lib/blur-data.ts`
+  - Bilan : 1459 KB → 380 KB WebP (-74%)
+- Task 9: Création du composant `src/components/fitness/optimized-image.tsx` qui :
+  - Sert du WebP via `<picture>` avec fallback JPEG
+  - Affiche un placeholder flou (LQIP) en arrière-plan pendant le chargement
+  - Lazy-loading par défaut (`loading="lazy"`, `decoding="async"`), eager pour le hero
+  - `fetchPriority="high"` pour le hero
+  - Fallback gradient si l'image échoue (onError)
+- Remplacement de tous les `<img>` par `<OptimizedImage>` dans :
+  - `immersive-hero.tsx` (hero eager)
+  - `method-showcase.tsx` (3 piliers + 8 galerie, tous lazy)
+  - `session-player.tsx` (image exercice, eager car dans modale)
+- Mise à jour de `program-data.ts` : chemins `/images/x.jpg` → noms de base `x` (25 références)
+- `next.config.ts` : `images.unoptimized: true` (on sert nos propres WebP), en-têtes Cache-Control `public, max-age=31536000, immutable` pour /images/ et /_next/static/
+- Task 11: Vérification Agent Browser :
+  - 0 erreur console, 0 erreur page
+  - 12 éléments <picture> avec sources WebP détectés dans le DOM
+  - 12 placeholders flous présents
+  - Lazy-loading vérifié : seulement 4 images chargées initialement (viewport), les autres au scroll
+  - Lecteur de séance : image exercice se charge (1/1 loaded), timer décompte correct (0:30→0:27)
+  - Navigation entre exercices : nouvelle image WebP se charge à chaque transition
+  - Aucune erreur ERR_CONNECTION_RESET / ERR_TIMED_OUT
+
+Stage Summary:
+- Optimisation massive pour connexion lente :
+  - Taille totale images : 1.43 MB → 380 KB WebP (-74%)
+  - Lazy-loading : seules les images visibles se chargent (hero ~83KB initial vs 1.5MB avant)
+  - Placeholders flous (LQIP) : affichage instantané pendant le chargement
+  - Fallback élégant si une image échoue (gradient + icône au lieu d'une image cassée)
+  - Cache navigateur 1 an immutable : seconde visite quasi instantanée
+  - WebP servi en priorité via <picture>, JPEG fallback pour très anciens navigateurs
+- Lint : 0 erreur, 0 warning
+- Toutes les interactions vérifiées via Agent Browser : hero, calendrier, lecteur de séance, timer, navigation entre exercices.
