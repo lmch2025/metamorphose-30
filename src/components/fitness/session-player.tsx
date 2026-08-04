@@ -108,7 +108,6 @@ export function SessionPlayer({
   // Refs pour suivre les annonces déjà jouées (évite les répétitions)
   const announcedIdxRef = useRef(-1);
   const announcedHalfwayRef = useRef(false);
-  const lastSpokenSecondRef = useRef(-1);
 
   const exercises = day?.exercises ?? [];
   const current = exercises[currentIndex];
@@ -138,7 +137,6 @@ export function SessionPlayer({
     if (announcedIdxRef.current === currentIndex) return;
     announcedIdxRef.current = currentIndex;
     announcedHalfwayRef.current = false;
-    lastSpokenSecondRef.current = -1;
 
     // Son de transition
     if (currentIndex > 0) {
@@ -158,84 +156,116 @@ export function SessionPlayer({
     return () => clearTimeout(timer);
   }, [currentIndex, open, current, sessionComplete, exercises.length, audio]);
 
-  // --- Décompte avec déclenchements audio ---
+  // --- Intervalle de décompte ---
+  // RESPONSABILITÉ UNIQUE : décrémenter timeLeft de 1 chaque seconde.
+  // Aucun effet de bord, aucun setState imbriqué, aucune dépendance à `current`
+  // ou `exercises` (évite de recréer l'intervalle à chaque changement d'exercice,
+  // ce qui causait des race conditions et des transitions prématurées).
   useEffect(() => {
     if (!isPlaying || sessionComplete) return;
     intervalRef.current = setInterval(() => {
-      setTimeLeft((t) => {
-        const newT = t - 1;
-
-        // Annonces basées sur le temps restant (uniquement la première fois)
-        if (current && newT > 0 && newT !== lastSpokenSecondRef.current) {
-          // À 10 secondes : annonce "10 secondes"
-          if (newT === 10) {
-            audio.say("Dix secondes.", { rate: 1.1 });
-          }
-          // À 3, 2, 1 : beep + voix
-          else if (newT === 3) {
-            audio.play("beep-countdown");
-            setTimeout(() => audio.say("Trois.", { rate: 1.2 }), 150);
-          } else if (newT === 2) {
-            audio.play("beep-countdown");
-            setTimeout(() => audio.say("Deux.", { rate: 1.2 }), 150);
-          } else if (newT === 1) {
-            audio.play("beep-countdown");
-            setTimeout(() => audio.say("Un.", { rate: 1.2 }), 150);
-          }
-          // À la moitié : ding + encouragement
-          else if (
-            !announcedHalfwayRef.current &&
-            newT === Math.floor(current.duration / 2)
-          ) {
-            announcedHalfwayRef.current = true;
-            audio.play("ding-halfway");
-            const encouragements = [
-              "Tu tiens bon, continue !",
-              "Parfait, garde le rythme !",
-              "Excellent, ne lâche rien !",
-              "Tu gères, respire !",
-              "Bravo, tu es fort(e) !",
-            ];
-            const msg =
-              encouragements[
-                Math.floor(Math.random() * encouragements.length)
-              ];
-            setTimeout(() => audio.say(msg, { rate: 1.1 }), 400);
-          }
-          lastSpokenSecondRef.current = newT;
-        }
-
-        if (newT <= 0) {
-          // Fin de l'exercice courant
-          setCurrentIndex((idx) => {
-            const next = idx + 1;
-            if (next >= exercises.length) {
-              // Dernier exercice terminé → fanfare
-              setSessionComplete(true);
-              setIsPlaying(false);
-              setTimeout(() => audio.play("fanfare-celebrate"), 200);
-              setTimeout(() => {
-                audio.say(
-                  `Bravo ! Séance du jour ${day?.day} terminée. ${day?.quote ?? ""}`,
-                  { rate: 1.0 },
-                );
-              }, 800);
-              return idx;
-            }
-            // Chime de fin + transition
-            audio.play("chime-complete");
-            setTimeLeft(exercises[next].duration);
-            return next;
-          });
-          return 0;
-        }
-        return newT;
-      });
+      setTimeLeft((t) => (t > 0 ? t - 1 : 0));
     }, 1000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, sessionComplete, exercises, current, audio, day]);
+  }, [isPlaying, sessionComplete]);
+
+  // --- Transition entre exercices (quand timeLeft atteint 0) ---
+  // Effect séparé qui réagit à timeLeft === 0 pour avancer vers l'exercice
+  // suivant ou terminer la séance. Pas de setState dans un updater :
+  // tout se fait au niveau de l'effect, de façon fiable et prédictible.
+  //
+  // Les appels setState ci-dessous sont intentionnels : l'effect réagit à un
+  // changement d'état dérivé (le timer atteint 0) et déclenche une transition
+  // one-shot vers l'exercice suivant. Ce n'est pas un anti-pattern en cascade
+  // car la condition (timeLeft === 0) n'est vraie qu'une seule fois par exercice,
+  // et le guard `transitioningRef` empêche toute double exécution.
+  const transitioningRef = useRef(false);
+  useEffect(() => {
+    if (!isPlaying || sessionComplete || !open) return;
+    if (timeLeft !== 0) {
+      transitioningRef.current = false;
+      return;
+    }
+    // Évite la double-transition (l'effect peut se déclencher deux fois
+    // avant que timeLeft ne soit mis à jour à la durée du prochain exercice)
+    if (transitioningRef.current) return;
+    transitioningRef.current = true;
+
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= exercises.length) {
+      // Dernier exercice terminé → fanfare
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSessionComplete(true);
+       
+      setIsPlaying(false);
+      setTimeout(() => audio.play("fanfare-celebrate"), 200);
+      setTimeout(() => {
+        audio.say(
+          `Bravo ! Séance du jour ${day?.day} terminée. ${day?.quote ?? ""}`,
+          { rate: 1.0 },
+        );
+      }, 800);
+      return;
+    }
+    // Chime de fin + passage à l'exercice suivant
+    audio.play("chime-complete");
+     
+    setCurrentIndex(nextIndex);
+     
+    setTimeLeft(exercises[nextIndex].duration);
+  }, [
+    timeLeft,
+    isPlaying,
+    sessionComplete,
+    open,
+    currentIndex,
+    exercises,
+    day,
+    audio,
+  ]);
+
+  // --- Annonces audio basées sur le temps restant ---
+  // Effect dédié qui réagit à chaque changement de timeLeft pour déclencher
+  // les sons et la voix au bon moment. Pas d'effet de bord dans un updater.
+  useEffect(() => {
+    if (!isPlaying || sessionComplete || !current || timeLeft <= 0) return;
+
+    // À 10 secondes : annonce "10 secondes"
+    if (timeLeft === 10) {
+      audio.say("Dix secondes.", { rate: 1.1 });
+    }
+    // À 3, 2, 1 : beep + voix
+    else if (timeLeft === 3) {
+      audio.play("beep-countdown");
+      setTimeout(() => audio.say("Trois.", { rate: 1.2 }), 150);
+    } else if (timeLeft === 2) {
+      audio.play("beep-countdown");
+      setTimeout(() => audio.say("Deux.", { rate: 1.2 }), 150);
+    } else if (timeLeft === 1) {
+      audio.play("beep-countdown");
+      setTimeout(() => audio.say("Un.", { rate: 1.2 }), 150);
+    }
+    // À la moitié : ding + encouragement
+    else if (
+      !announcedHalfwayRef.current &&
+      timeLeft === Math.floor(current.duration / 2)
+    ) {
+      announcedHalfwayRef.current = true;
+      audio.play("ding-halfway");
+      const encouragements = [
+        "Tu tiens bon, continue !",
+        "Parfait, garde le rythme !",
+        "Excellent, ne lâche rien !",
+        "Tu gères, respire !",
+        "Bravo, tu es fort(e) !",
+      ];
+      const msg =
+        encouragements[Math.floor(Math.random() * encouragements.length)];
+      setTimeout(() => audio.say(msg, { rate: 1.1 }), 400);
+    }
+  }, [timeLeft, isPlaying, sessionComplete, current, audio]);
 
   // Nettoie la voix à la fermeture
   useEffect(() => {
@@ -428,7 +458,7 @@ export function SessionPlayer({
                           setTimeLeft(exercises[0].duration);
                           announcedIdxRef.current = -1;
                           announcedHalfwayRef.current = false;
-                          lastSpokenSecondRef.current = -1;
+                          transitioningRef.current = false;
                           setIsPlaying(true);
                           audio.play("beep-start");
                         }}
