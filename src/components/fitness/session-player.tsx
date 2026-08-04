@@ -16,6 +16,8 @@ import {
   ExternalLink,
   Trophy,
   RotateCcw,
+  Box,
+  ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +29,7 @@ import {
 } from "@/lib/program-data";
 import { fitnessResources } from "@/lib/resources-data";
 import { OptimizedImage } from "@/components/fitness/optimized-image";
+import { DynamicExerciseModel3D } from "@/components/fitness/dynamic-exercise-model-3d";
 import { useAudioContext } from "@/components/fitness/audio-provider";
 import { AudioControls } from "@/components/fitness/audio-controls";
 import { cn } from "@/lib/utils";
@@ -99,6 +102,7 @@ export function SessionPlayer({
   const [isPlaying, setIsPlaying] = useState(false);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [markedComplete, setMarkedComplete] = useState(alreadyCompleted);
+  const [view3D, setView3D] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Refs pour suivre les annonces déjà jouées (évite les répétitions)
@@ -444,15 +448,30 @@ export function SessionPlayer({
                     transition={{ duration: 0.3 }}
                     className="grid gap-0 lg:grid-cols-2"
                   >
-                    {/* Colonne image + timer */}
+                    {/* Colonne visuel + timer (image OU modèle 3D) */}
                     <div className="relative flex flex-col">
                       <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-auto lg:h-full">
-                        <OptimizedImage
-                          name={current.image ?? "ambient-tone"}
-                          alt={current.name}
-                          eager
-                          wrapperClassName="absolute inset-0 h-full w-full"
-                        />
+                        {/* Soit l'image, soit le modèle 3D */}
+                        {view3D ? (
+                          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 to-background">
+                            <DynamicExerciseModel3D
+                              exerciseId={current.id}
+                              className="absolute inset-0 h-full w-full"
+                              autoRotate
+                            />
+                            {/* Bandeau aide 3D */}
+                            <div className="pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 rounded-full bg-background/60 px-3 py-1 text-[10px] text-muted-foreground backdrop-blur-sm">
+                              Glissez pour pivoter · molette pour zoomer
+                            </div>
+                          </div>
+                        ) : (
+                          <OptimizedImage
+                            name={current.image ?? "ambient-tone"}
+                            alt={current.name}
+                            eager
+                            wrapperClassName="absolute inset-0 h-full w-full"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
 
                         {/* Badge catégorie */}
@@ -467,6 +486,44 @@ export function SessionPlayer({
                             <catMeta.icon className="mr-1.5 h-3.5 w-3.5" />
                             {catMeta.label}
                           </Badge>
+                        </div>
+
+                        {/* Toggle Image / 3D */}
+                        <div className="absolute right-4 top-4 z-10 flex gap-1 rounded-lg glass-strong p-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setView3D(false);
+                              audio.play("ui-click");
+                            }}
+                            className={cn(
+                              "flex h-7 w-7 items-center justify-center rounded-md transition-all",
+                              !view3D
+                                ? "bg-amber-500/20 text-amber-300"
+                                : "text-muted-foreground hover:text-foreground",
+                            )}
+                            aria-label="Vue image"
+                            aria-pressed={!view3D}
+                          >
+                            <ImageIcon className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setView3D(true);
+                              audio.play("unlock");
+                            }}
+                            className={cn(
+                              "flex h-7 w-7 items-center justify-center rounded-md transition-all",
+                              view3D
+                                ? "bg-amber-500/20 text-amber-300"
+                                : "text-muted-foreground hover:text-foreground",
+                            )}
+                            aria-label="Vue 3D"
+                            aria-pressed={view3D}
+                          >
+                            <Box className="h-3.5 w-3.5" />
+                          </button>
                         </div>
 
                         {/* Timer géant en bas de l'image */}

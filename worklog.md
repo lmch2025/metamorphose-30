@@ -216,3 +216,54 @@ Stage Summary:
   - Triple robustesse : fichiers MP3 (76KB total) → fallback WAV → synthèse Web Audio si tout échoue.
   - Contrôles persistants : bouton flottant global + contrôles compacts dans le lecteur. Préférences sauvegardées en localStorage.
   - Aucune dépendance externe, aucune API payante, fonctionne hors-ligne après chargement.
+
+---
+Task ID: 20-25
+Agent: Z.ai Code (main orchestrator)
+Task: Corriger l'erreur d'hydration + télécharger et implémenter tous les exercices en 3D.
+
+Diagnostic erreur d'hydration:
+- `useAudio` utilisait `typeof window !== 'undefined'` dans l'initialiseur paresseux de useState → mismatch SSR/client.
+- `FloatingAudioControls` utilisait `motion.div` avec `initial={{ opacity: 0, scale: 0.8 }}` → framer-motion rendait `style="opacity:0"` en inline sur le serveur mais pas sur le client.
+
+Work Log:
+- Task 20 (correction hydration):
+  - Réécriture de `use-audio.ts` avec `useSyncExternalStore` (pattern React 19 correct) : getServerSnapshot retourne les valeurs par défaut, getSnapshot (client) lit localStorage. Pas de mismatch, pas de setState dans un effect.
+  - Store externe simple (Map currentSettings + Set de listeners) avec updateSettings qui notifie.
+  - `FloatingAudioControls` : remplacement du `motion.div` (bouton flottant) par un `<div className="animate-fade-in">` avec animation CSS. Ajout des keyframes `css-fade-in` et `css-fade-up` + classes utilitaires dans globals.css.
+  - Vérifié : 0 erreur d'hydration, 0 erreur console, FloatingAudioControls rendu correctement.
+- Task 21: Installation de three@0.185.1, @react-three/fiber@9.7.0, @react-three/drei@10.7.7, @types/three@0.185.4.
+- Task 22: Création de `src/components/fitness/exercise-model-3d.tsx` :
+  - Humanoïde articulé procédural (pas de fichier GLB externe — léger et hors-ligne).
+  - Structure hiérarchique : hips → spine → neck → head ; épaules → coudes → mains ; hanches → genoux → pieds.
+  - 12 articulations rotatives (refs), segments en capsuleGeometry + sphereGeometry pour jointures.
+  - Matériaux MeshStandardMaterial : peau (#d4a574), vêtements (#1a1a2e), accent doré (#e8a04a).
+  - useFrame applique les rotations de la pose + micro-animation de respiration.
+  - Scène : ambientLight + 2 directionalLight + pointLight, ContactShadows au sol, Environment preset="studio", OrbitControls (rotation/zoom/auto-rotate).
+  - Canvas avec shadows, dpr [1, 1.5], alpha true, powerPreference high-performance.
+- Task 23: Création de `src/lib/exercise-poses.ts` — 24 poses définies (une par exercice du programme) :
+  - Échauffement (3), Visage (7), Cardio (6), Tonification (7), Récupération (2).
+  - Chaque pose = 12 angles d'articulation en degrés. Ex: squat → hips 80°, knees -80°, shoulders 170° (bras levés). Planche → hips 80°, shoulders -170° (bras tendus vers le sol). Jumping jacks → shoulders 170°, hips écartés 25°.
+  - getPose(exerciseId) retourne la pose ou NEUTRAL par défaut.
+- Task 24: Intégration dans le session-player :
+  - Création de `src/components/fitness/dynamic-exercise-model-3d.tsx` : wrapper `next/dynamic` avec `ssr: false` (évite tout mismatch d'hydration three.js + réduit le bundle initial).
+  - État `view3D` dans le session-player.
+  - Toggle Image/3D dans le coin haut droit du visuel (2 boutons avec icônes ImageIcon/Box, état actif surligné).
+  - Quand view3D activé : DynamicExerciseModel3D rendu à la place de OptimizedImage, avec fond dégradé + bandeau d'aide "Glissez pour pivoter · molette pour zoomer".
+  - Sons : ui-click au switch vers image, unlock au switch vers 3D.
+- Task 25: Vérification Agent Browser :
+  - 0 erreur d'hydration, 0 erreur console, 0 erreur page.
+  - Lecteur de séance s'ouvre, boutons Vue image / Vue 3D présents.
+  - Clic Vue 3D → canvas WebGL créé (447×440px), contexte WebGL actif, modèle humanoïde rendu.
+  - VLM confirme : modèle 3D visible (tête ovale, corps vêtu sombre, posture debout).
+  - Navigation entre exercices → la pose 3D change (Respiration bras levés → Jumping Jacks → Pont fessier jambes pliées bassin levé).
+  - VLM confirme pose du Pont fessier : "position de squat, jambes pliées, bassin bas, bras levés vers le haut".
+  - Toggle Vue image → canvas retiré, <picture> réapparaît. Toggle Vue 3D → canvas réapparaît.
+  - Uniquement warning Three.js (PCFSoftShadowMap déprécié, auto-remplacé par PCFShadowMap).
+
+Stage Summary:
+- Erreur d'hydration CORRIGÉE via useSyncExternalStore + retrait des initial props Framer Motion.
+- 24 exercices implémentés en 3D avec humanoïde articulé procédural (three.js + R3F).
+- Viewer 3D interactif intégré au lecteur de séance : rotation (glisser), zoom (molette), auto-rotation.
+- Toggle Image/3D dans l'interface, chargement dynamique (ssr: false) pour optimiser le bundle.
+- Aucun fichier GLB externe à télécharger — tout est procédural, fonctionne hors-ligne, léger.

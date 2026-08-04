@@ -18,12 +18,10 @@ export function FloatingAudioControls() {
 
   return (
     <>
-      {/* Bouton flottant */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.5 }}
-        className="fixed right-3 top-3 z-40 sm:right-4 sm:top-4"
+      {/* Bouton flottant — div simple avec animation CSS (pas de mismatch d'hydration) */}
+      <div
+        className="fixed right-3 top-3 z-40 animate-fade-in sm:right-4 sm:top-4"
+        style={{ animationDelay: "0.5s", animationFillMode: "both" }}
       >
         <Button
           size="icon"
@@ -39,7 +37,7 @@ export function FloatingAudioControls() {
             <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-background" />
           )}
         </Button>
-      </motion.div>
+      </div>
 
       {/* Panneau déroulant */}
       <AnimatePresence>
