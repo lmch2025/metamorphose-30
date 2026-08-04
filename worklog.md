@@ -165,3 +165,54 @@ Stage Summary:
 - Root cause : `opacity: 0` dans les `initial` props de Framer Motion rendait le HTML serveur invisible tant que la hydration JS n'avait pas lieu.
 - Fix : suppression de `opacity: 0` des initial props (le contenu est visible par défaut), conservation des animations de transform (slide-up) qui s'activent quand JS charge.
 - Bonus : barre de chargement CSS visible immédiatement, cachée automatiquement après hydration.
+
+---
+Task ID: 15-19
+Agent: Z.ai Code (main orchestrator)
+Task: Implémenter la voix du navigateur pour guider tous les exercices + télécharger et implémenter des effets sonores réalistes pour une interactivité exceptionnelle.
+
+Work Log:
+- Task 15: Création de `scripts/gen-sounds.ts` — synthèse audio pure (mathématiques, zéro dépendance) générant 10 fichiers WAV réalistes :
+  - beep-start (880Hz), beep-countdown (660Hz), chime-go (880+1320+1760Hz), ding-halfway (1046Hz triangle), chime-complete (accord majeur Do-Mi-Sol-Do), fanfare-celebrate (3 notes ascendantes + accord tenu 1s), whoosh (bruit filtré passe-bande 200→2000Hz), tick (1000Hz 0.04s), ui-click (1200Hz carré), unlock (arpège Mi-La-Mi).
+  - Conversion MP3 via ffmpeg (96kbps mono) : 380KB WAV → 76KB MP3 (-80%).
+  - Fichiers dans `/public/sounds/` (10 .wav + 10 .mp3).
+- Task 16: Création de `src/lib/audio-engine.ts` — moteur audio unifié 3 couches :
+  1. Lecture fichiers MP3/WAV depuis /sounds/ (cache des éléments Audio)
+  2. Synthèse Web Audio de secours : si un fichier échoue (ERR_CONNECTION_RESET), le son est généré à la volée (oscillateurs + enveloppes ADSR + filtres). Marque les fichiers échoués pour synthèse directe ultérieure.
+  3. Voix TTS via Web Speech API (speechSynthesis) : sélection automatique voix française, annulation des utterances en attente, rate/pitch/volume configurables.
+  - Persistance localStorage (clé metamorphose30.audio-settings).
+  - unlockAudio() pour réveiller AudioContext après interaction utilisateur.
+- Task 17: Création de `src/hooks/use-audio.ts` — hook React avec état settings (soundsEnabled, voiceEnabled, volume), toggleSounds, toggleVoice, setVolume, play, say, stopVoice, unlock. Init paresseux depuis localStorage (pas de setState dans effect).
+- Création de `src/components/fitness/audio-provider.tsx` — contexte React partagé pour toute l'app.
+- Task 18: Intégration dans `session-player.tsx` :
+  - Annonce vocale au changement d'exercice : "Exercice N sur M. [Nom]. [Première instruction]." (avec whoosh de transition si pas le 1er).
+  - À 10s restantes : voix "Dix secondes."
+  - À 3, 2, 1s : beep-countdown + voix "Trois/Deux/Un."
+  - À mi-parcours : ding-halfway + encouragement aléatoire ("Tu tiens bon, continue !" / "Parfait, garde le rythme !" / etc.).
+  - Fin d'exercice : chime-complete.
+  - Fin de séance : fanfare-celebrate + voix "Bravo ! Séance du jour X terminée. [Citation]."
+  - Clic Play : beep-start. Navigation : ui-click. Marquer terminé : unlock sound.
+  - Refs (announcedIdxRef, announcedHalfwayRef, lastSpokenSecondRef) pour éviter répétitions.
+  - Nettoyage voix à la fermeture du lecteur.
+  - Contrôles audio compacts (voix + sons) dans l'en-tête du lecteur.
+- Task 19: Création de `src/components/fitness/floating-audio-controls.tsx` — bouton flottant en haut à droite + panneau déroulant avec toggles voix/sons + slider volume. Indicateur vert quand actif.
+- Création de `src/components/fitness/audio-controls.tsx` — composant réutilisable (compact ou complet).
+- Mise à jour `page.tsx` : enveloppe l'app dans AudioProvider + FloatingAudioControls.
+- Lint : 0 erreur, 0 warning (corrections : init paresseux useState au lieu de setState dans effect, ref mis à jour dans effect au lieu de pendant rendu).
+- Vérification Agent Browser :
+  - 0 erreur console, 0 erreur page
+  - Bouton flottant "Réglages audio" présent, panneau s'ouvre avec toggles voix/sons + volume
+  - Lecteur de séance : 2 boutons audio dans l'en-tête (voix + sons)
+  - Clic Play → beep-start chargé, timer décompte (0:30→0:20→0:04)
+  - 7 sons MP3 différents chargés et déclenchés pendant la séance : beep-start, ui-click, ding-halfway, beep-countdown, chime-complete, whoosh, fanfare-celebrate
+  - Écran "Séance terminée ! 🎉" atteint, fanfare jouée
+  - speechSynthesis supporté (sur navigateur réel de l'utilisateur avec moteur TTS, la voix parlera ; en Chromium headless sans TTS engine, les utterances sont mises en file)
+  - Toutes les 6 sections visibles, footer sticky OK
+
+Stage Summary:
+- Expérience audio immersive complète opérationnelle :
+  - Voix du coach : annonce chaque exercice (nom + instructions), compte à rebours vocal (10s, 3-2-1), encouragements à mi-parcours, félicitations finales.
+  - 10 effets sonores réalistes : beep, carillons, ding, fanfare, whoosh, tick, clic, unlock.
+  - Triple robustesse : fichiers MP3 (76KB total) → fallback WAV → synthèse Web Audio si tout échoue.
+  - Contrôles persistants : bouton flottant global + contrôles compacts dans le lecteur. Préférences sauvegardées en localStorage.
+  - Aucune dépendance externe, aucune API payante, fonctionne hors-ligne après chargement.

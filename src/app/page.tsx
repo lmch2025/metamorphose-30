@@ -8,6 +8,8 @@ import { DayCalendar } from "@/components/fitness/day-calendar";
 import { SessionPlayer } from "@/components/fitness/session-player";
 import { ResourcesSection } from "@/components/fitness/resources-section";
 import { SiteFooter } from "@/components/fitness/site-footer";
+import { AudioProvider } from "@/components/fitness/audio-provider";
+import { FloatingAudioControls } from "@/components/fitness/floating-audio-controls";
 import { getDay } from "@/lib/program-data";
 import { useToast } from "@/hooks/use-toast";
 
@@ -116,42 +118,45 @@ export default function Home() {
   const dayProgram = selectedDay ? getDay(selectedDay) : null;
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <ImmersiveHero
-        onStart={scrollToProgramme}
-        onResources={scrollToResources}
-        completedCount={completedDays.length}
-      />
+    <AudioProvider>
+      <div className="flex min-h-screen flex-col">
+        <FloatingAudioControls />
+        <ImmersiveHero
+          onStart={scrollToProgramme}
+          onResources={scrollToResources}
+          completedCount={completedDays.length}
+        />
 
-      <StatsOverview
-        completedCount={completedDays.length}
-        totalSessions={stats.totalSessions}
-        totalMinutes={stats.totalMinutes}
-        currentStreak={stats.currentStreak}
-        longestStreak={stats.longestStreak}
-      />
+        <StatsOverview
+          completedCount={completedDays.length}
+          totalSessions={stats.totalSessions}
+          totalMinutes={stats.totalMinutes}
+          currentStreak={stats.currentStreak}
+          longestStreak={stats.longestStreak}
+        />
 
-      <MethodShowcase />
+        <MethodShowcase />
 
-      <DayCalendar
-        completedDays={completedDays}
-        onSelectDay={handleSelectDay}
-      />
+        <DayCalendar
+          completedDays={completedDays}
+          onSelectDay={handleSelectDay}
+        />
 
-      <ResourcesSection />
+        <ResourcesSection />
 
-      <SiteFooter />
+        <SiteFooter />
 
-      <SessionPlayer
-        key={`${selectedDay ?? "none"}-${sessionNonce}`}
-        day={dayProgram}
-        open={playerOpen}
-        alreadyCompleted={
-          selectedDay !== null ? completedDays.includes(selectedDay) : false
-        }
-        onClose={handleClosePlayer}
-        onComplete={handleComplete}
-      />
-    </div>
+        <SessionPlayer
+          key={`${selectedDay ?? "none"}-${sessionNonce}`}
+          day={dayProgram}
+          open={playerOpen}
+          alreadyCompleted={
+            selectedDay !== null ? completedDays.includes(selectedDay) : false
+          }
+          onClose={handleClosePlayer}
+          onComplete={handleComplete}
+        />
+      </div>
+    </AudioProvider>
   );
 }

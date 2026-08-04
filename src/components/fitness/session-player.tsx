@@ -27,6 +27,8 @@ import {
 } from "@/lib/program-data";
 import { fitnessResources } from "@/lib/resources-data";
 import { OptimizedImage } from "@/components/fitness/optimized-image";
+import { useAudioContext } from "@/components/fitness/audio-provider";
+import { AudioControls } from "@/components/fitness/audio-controls";
 import { cn } from "@/lib/utils";
 
 interface SessionPlayerProps {
@@ -86,6 +88,7 @@ export function SessionPlayer({
   onClose,
   onComplete,
 }: SessionPlayerProps) {
+  const audio = useAudioContext();
   // État initialisé paresseusement depuis `day` — le parent passe une `key`
   // unique à chaque ouverture de séance pour remonter ce composant à neuf,
   // ce qui évite tout setState synchrone dans un effect (recommandation React).
@@ -98,8 +101,18 @@ export function SessionPlayer({
   const [markedComplete, setMarkedComplete] = useState(alreadyCompleted);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Refs pour suivre les annonces déjà jouées (évite les répétitions)
+  const announcedIdxRef = useRef(-1);
+  const announcedHalfwayRef = useRef(false);
+  const lastSpokenSecondRef = useRef(-1);
+
   const exercises = day?.exercises ?? [];
   const current = exercises[currentIndex];
+
+  // Débloque l'AudioContext au premier montage (nécessaire sur Chrome/Safari)
+  useEffect(() => {
+    if (open) audio.unlock();
+  }, [open, audio]);
 
   // Ferme avec ESC
   useEffect(() => {
@@ -115,43 +128,142 @@ export function SessionPlayer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, sessionComplete, onClose]);
 
-  // Décompte
+  // --- Annonce vocale + son quand l'exercice change ---
+  useEffect(() => {
+    if (!open || !current || sessionComplete) return;
+    if (announcedIdxRef.current === currentIndex) return;
+    announcedIdxRef.current = currentIndex;
+    announcedHalfwayRef.current = false;
+    lastSpokenSecondRef.current = -1;
+
+    // Son de transition
+    if (currentIndex > 0) {
+      audio.play("whoosh");
+    }
+
+    // Annonce vocale : nom de l'exercice + première instruction
+    const num = currentIndex + 1;
+    const total = exercises.length;
+    const firstInstruction = current.instructions[0] ?? "";
+    const announcement = `Exercice ${num} sur ${total}. ${current.name}. ${firstInstruction}.`;
+    // Petit délai pour laisser le whoosh se terminer
+    const timer = setTimeout(() => {
+      audio.say(announcement, { rate: 1.05 });
+    }, currentIndex > 0 ? 350 : 100);
+
+    return () => clearTimeout(timer);
+  }, [currentIndex, open, current, sessionComplete, exercises.length, audio]);
+
+  // --- Décompte avec déclenchements audio ---
   useEffect(() => {
     if (!isPlaying || sessionComplete) return;
     intervalRef.current = setInterval(() => {
       setTimeLeft((t) => {
-        if (t <= 1) {
-          // Passe à l'exercice suivant
+        const newT = t - 1;
+
+        // Annonces basées sur le temps restant (uniquement la première fois)
+        if (current && newT > 0 && newT !== lastSpokenSecondRef.current) {
+          // À 10 secondes : annonce "10 secondes"
+          if (newT === 10) {
+            audio.say("Dix secondes.", { rate: 1.1 });
+          }
+          // À 3, 2, 1 : beep + voix
+          else if (newT === 3) {
+            audio.play("beep-countdown");
+            setTimeout(() => audio.say("Trois.", { rate: 1.2 }), 150);
+          } else if (newT === 2) {
+            audio.play("beep-countdown");
+            setTimeout(() => audio.say("Deux.", { rate: 1.2 }), 150);
+          } else if (newT === 1) {
+            audio.play("beep-countdown");
+            setTimeout(() => audio.say("Un.", { rate: 1.2 }), 150);
+          }
+          // À la moitié : ding + encouragement
+          else if (
+            !announcedHalfwayRef.current &&
+            newT === Math.floor(current.duration / 2)
+          ) {
+            announcedHalfwayRef.current = true;
+            audio.play("ding-halfway");
+            const encouragements = [
+              "Tu tiens bon, continue !",
+              "Parfait, garde le rythme !",
+              "Excellent, ne lâche rien !",
+              "Tu gères, respire !",
+              "Bravo, tu es fort(e) !",
+            ];
+            const msg =
+              encouragements[
+                Math.floor(Math.random() * encouragements.length)
+              ];
+            setTimeout(() => audio.say(msg, { rate: 1.1 }), 400);
+          }
+          lastSpokenSecondRef.current = newT;
+        }
+
+        if (newT <= 0) {
+          // Fin de l'exercice courant
           setCurrentIndex((idx) => {
             const next = idx + 1;
             if (next >= exercises.length) {
+              // Dernier exercice terminé → fanfare
               setSessionComplete(true);
               setIsPlaying(false);
+              setTimeout(() => audio.play("fanfare-celebrate"), 200);
+              setTimeout(() => {
+                audio.say(
+                  `Bravo ! Séance du jour ${day?.day} terminée. ${day?.quote ?? ""}`,
+                  { rate: 1.0 },
+                );
+              }, 800);
               return idx;
             }
+            // Chime de fin + transition
+            audio.play("chime-complete");
             setTimeLeft(exercises[next].duration);
             return next;
           });
           return 0;
         }
-        return t - 1;
+        return newT;
       });
     }, 1000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, sessionComplete, exercises]);
+  }, [isPlaying, sessionComplete, exercises, current, audio, day]);
+
+  // Nettoie la voix à la fermeture
+  useEffect(() => {
+    if (!open) {
+      audio.stopVoice();
+    }
+  }, [open, audio]);
 
   const goTo = useCallback(
     (idx: number) => {
       if (idx < 0 || idx >= exercises.length) return;
+      audio.play("ui-click");
       setCurrentIndex(idx);
       setTimeLeft(exercises[idx].duration);
     },
-    [exercises],
+    [exercises, audio],
   );
 
+  const handlePlayPause = useCallback(() => {
+    audio.unlock();
+    if (!isPlaying) {
+      // Démarre : beep de départ si c'est le premier exercice
+      if (currentIndex === 0 && timeLeft === exercises[0]?.duration) {
+        audio.play("beep-start");
+      }
+    }
+    audio.play("ui-click");
+    setIsPlaying((p) => !p);
+  }, [isPlaying, currentIndex, timeLeft, exercises, audio]);
+
   const handleComplete = () => {
+    audio.play("unlock");
     onComplete();
     setMarkedComplete(true);
   };
@@ -215,6 +327,7 @@ export function SessionPlayer({
                 </div>
                 <Progress value={overallPct} className="h-1.5" />
               </div>
+              <AudioControls audio={audio} compact />
               <Button
                 size="icon"
                 variant="ghost"
@@ -309,7 +422,11 @@ export function SessionPlayer({
                           setSessionComplete(false);
                           setCurrentIndex(0);
                           setTimeLeft(exercises[0].duration);
+                          announcedIdxRef.current = -1;
+                          announcedHalfwayRef.current = false;
+                          lastSpokenSecondRef.current = -1;
                           setIsPlaying(true);
+                          audio.play("beep-start");
                         }}
                         className="glass border-white/15 bg-white/5 text-foreground hover:bg-white/10"
                       >
@@ -486,7 +603,7 @@ export function SessionPlayer({
 
                   <Button
                     size="icon"
-                    onClick={() => setIsPlaying((p) => !p)}
+                    onClick={handlePlayPause}
                     className="h-14 w-14 rounded-full bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30 hover:scale-105 transition-transform"
                     aria-label={isPlaying ? "Pause" : "Lecture"}
                   >
@@ -504,6 +621,7 @@ export function SessionPlayer({
                       if (currentIndex === exercises.length - 1) {
                         setSessionComplete(true);
                         setIsPlaying(false);
+                        setTimeout(() => audio.play("fanfare-celebrate"), 200);
                       } else {
                         goTo(currentIndex + 1);
                       }
