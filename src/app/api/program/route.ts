@@ -17,7 +17,7 @@ export async function GET() {
       totalDays: TOTAL_DAYS,
       totalDuration: TOTAL_DURATION,
       totalExercises: TOTAL_EXERCISES,
-      dailyDuration: 300,
+      dailyDuration: 600,
     },
   });
 }
