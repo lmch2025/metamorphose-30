@@ -159,8 +159,12 @@ function DayCard({
         <DominantIcon className={cn("h-3.5 w-3.5", phaseStyle.text)} />
       </div>
 
-      {/* Titre court */}
-      <div className="line-clamp-2 text-[9px] font-medium leading-tight text-muted-foreground sm:text-[10px]">
+      {/* Titre court — suppressHydrationWarning car les apostrophes peuvent
+          être rendues différemment entre SSR et client selon les extensions */}
+      <div
+        suppressHydrationWarning
+        className="line-clamp-2 text-[9px] font-medium leading-tight text-muted-foreground sm:text-[10px]"
+      >
         {day.title}
       </div>
     </motion.button>
