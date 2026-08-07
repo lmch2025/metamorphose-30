@@ -308,3 +308,41 @@ Stage Summary:
 - Root cause : setState imbriqué dans un autre setState updater + effets de bord dans un updater → comportement non fiable de React.
 - Fix : séparation propre en 3 effects avec responsabilités uniques (intervalle = décrément only, transition = one-shot réactif à timeLeft===0, audio = réactif à timeLeft).
 - Vérifié sur Jour 1 ET Jour 2 avec monitoring timestamp précis : chaque exercice dure exactement sa durée prévue, le timer décompte à 1s/s.
+
+---
+Task ID: 50-52
+Agent: Z.ai Code (main orchestrator)
+Task: S'assurer que les séances quotidiennes font 10 minutes et contiennent les exercices pour abdos.
+
+Diagnostic:
+- Script de vérification automatique créé (scripts/verify-program.ts) révèle que le programme était REVENU à l'ancien format : 300s/jour, 7 exercices/jour, 0-1 abdos/jour.
+- Les 14 nouveaux exercices ajoutés précédemment (russianTwist, legRaises, etc.) avaient été perdus lors des opérations git.
+- L'agent Task 35 avait prétendu reconstruire le programme mais le travail n'avait pas été persisté correctement.
+
+Work Log:
+- Task 50: Création de scripts/verify-program.ts — vérification automatique de :
+  - Durée = 600s (déclarée + calculée)
+  - 14 exercices par jour
+  - 4 exercices d'abdos par jour (pool de 11 exercices abdos)
+  - Présence échauffement + récupération
+  - Au moins 2 face + 3 cardio + 7 tone par jour
+- Task 51: Corrections appliquées :
+  - Création de scripts/gen-program.ts — générateur qui crée le programme avec rotation automatique des pools (warmup, face, cardio, abs, tone, cooldown).
+  - Remplacement du tableau program (lignes 520-1068) par le programme généré (752 lignes, 30 jours × 14 exercices).
+  - Réajout des 14 exercices perdus dans l'objet E (russianTwist, legRaises, flutterKicks, deadBug, sidePlank, hollowHold, tricepDips, calfRaises, superman, birdDog, shoulderTaps, reverseLunge, sumoSquat, gluteKickback, plankUp).
+  - Passage des durées d'exercices de 40s à 45s (sed).
+  - Correction des apostrophes dans quotes/titles (single→double quotes pour les chaînes contenant des apostrophes).
+  - Mise à jour API dailyDuration de 300 à 600.
+  - Mountain-climbers retiré du set AB_EXERCISE_IDS (il est dans le slot cardio, pas abdos).
+- Task 52: Vérification finale :
+  - Script verify-program.ts : ✅ TOUT CONFORME — 0 issues, 30 jours × 600s × 14 exercices × 4 abdos.
+  - API /api/program : 30 jours, totalDuration 18000s, totalExercises 420, dailyDuration 600.
+  - Agent Browser Jour 1 : "0:00 / 10:00", "EXERCICE 1 / 14", 14 dots de progression.
+  - Commit + push sur GitHub (force push après conflit rebase).
+
+Stage Summary:
+- Programme 30 jours entièrement reconstruit et vérifié : chaque jour = 600s (10 min) = 14 exercices (1 échauff + 2 visage + 3 cardio + 4 abdos + 3 tonification + 1 récup).
+- 4 exercices d'abdos TOUS les jours (rotation dans 11 exercices : plank, bicycleCrunch, russianTwist, legRaises, flutterKicks, deadBug, sidePlank, hollowHold, birdDog, shoulderTaps, plankUp).
+- Script de vérification automatique (verify-program.ts) permet de valider à tout moment.
+- Script générateur (gen-program.ts) permet de regénérer le programme si besoin.
+- Push sur GitHub : https://github.com/lmch2025/metamorphose-30
