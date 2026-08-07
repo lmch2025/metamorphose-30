@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { ImmersiveHero } from "@/components/fitness/immersive-hero";
 import { StatsOverview } from "@/components/fitness/stats-overview";
 import { MethodShowcase } from "@/components/fitness/method-showcase";
@@ -10,55 +10,26 @@ import { ResourcesSection } from "@/components/fitness/resources-section";
 import { SiteFooter } from "@/components/fitness/site-footer";
 import { AudioProvider } from "@/components/fitness/audio-provider";
 import { FloatingAudioControls } from "@/components/fitness/floating-audio-controls";
-import { getDay } from "@/lib/program-data";
+import { PWAInstallPrompt } from "@/components/pwa/pwa-install-prompt";
+import { getDay, TOTAL_DAYS } from "@/lib/program-data";
 import { useToast } from "@/hooks/use-toast";
-
-interface ProgressData {
-  completedDays: number[];
-  stats: {
-    totalSessions: number;
-    totalMinutes: number;
-    currentStreak: number;
-    longestStreak: number;
-    lastSessionDay: number;
-    lastSessionDate: string | null;
-  };
-}
+import { useProgression } from "@/hooks/use-progression";
 
 export default function Home() {
-  const [completedDays, setCompletedDays] = useState<number[]>([]);
-  const [stats, setStats] = useState({
-    totalSessions: 0,
-    totalMinutes: 0,
-    currentStreak: 0,
-    longestStreak: 0,
-    lastSessionDay: 0,
-    lastSessionDate: null as string | null,
-  });
+  // Stockage local robuste (localStorage + sync serveur best-effort)
+  const {
+    completedDays,
+    stats,
+    completeDay,
+    nextDay,
+    isCompleted,
+    isUnlocked,
+  } = useProgression();
+
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [playerOpen, setPlayerOpen] = useState(false);
   const [sessionNonce, setSessionNonce] = useState(0);
   const { toast } = useToast();
-
-  // Charge la progression au montage
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch("/api/progress", { cache: "no-store" });
-        if (!res.ok) return;
-        const data: ProgressData = await res.json();
-        if (cancelled) return;
-        setCompletedDays(data.completedDays);
-        setStats(data.stats);
-      } catch (err) {
-        console.error("Erreur lors du chargement de la progression:", err);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const scrollToProgramme = useCallback(() => {
     document.getElementById("programme")?.scrollIntoView({ behavior: "smooth" });
@@ -82,38 +53,22 @@ export default function Home() {
 
   const handleComplete = useCallback(async () => {
     if (selectedDay === null) return;
-    try {
-      const res = await fetch("/api/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ day: selectedDay, completed: true }),
-      });
-      if (!res.ok) throw new Error("Erreur API");
-      const data = await res.json();
-      setCompletedDays(data.completedDays);
-      setStats((s) => ({
-        ...s,
-        totalSessions: data.totalSessions,
-        totalMinutes: data.totalSessions * 5,
-        currentStreak: data.currentStreak,
-        longestStreak: data.longestStreak,
-        lastSessionDay: data.day,
-        lastSessionDate: new Date().toISOString(),
-      }));
-      toast({
-        title: `Jour ${selectedDay} validé ! 🎉`,
-        description:
-          "Félicitations ! Ta progression est enregistrée. Reviens demain pour la suite.",
-      });
-    } catch (err) {
-      console.error(err);
-      toast({
-        title: "Erreur",
-        description: "Impossible d'enregistrer ta progression.",
-        variant: "destructive",
-      });
-    }
-  }, [selectedDay, toast]);
+    await completeDay(selectedDay);
+
+    // Message adaptatif : félicitations + incitation à passer au jour suivant
+    const isLastDay = selectedDay === TOTAL_DAYS;
+    const tomorrow = selectedDay + 1;
+    const tomorrowUnlocked = isUnlocked(tomorrow);
+
+    toast({
+      title: `Jour ${selectedDay} validé ! 🎉`,
+      description: isLastDay
+        ? "🏆 Tu as terminé les 30 jours ! Bravo pour cette transformation incroyable."
+        : tomorrowUnlocked
+          ? `Jour ${tomorrow} débloqué ! Reviens demain pour continuer ton parcours.`
+          : "Félicitations ! Ta progression est enregistrée.",
+    });
+  }, [selectedDay, completeDay, isUnlocked, toast]);
 
   const dayProgram = selectedDay ? getDay(selectedDay) : null;
 
@@ -121,6 +76,7 @@ export default function Home() {
     <AudioProvider>
       <div className="flex min-h-screen flex-col">
         <FloatingAudioControls />
+        <PWAInstallPrompt />
         <ImmersiveHero
           onStart={scrollToProgramme}
           onResources={scrollToResources}
@@ -137,10 +93,7 @@ export default function Home() {
 
         <MethodShowcase />
 
-        <DayCalendar
-          completedDays={completedDays}
-          onSelectDay={handleSelectDay}
-        />
+        <DayCalendar completedDays={completedDays} onSelectDay={handleSelectDay} />
 
         <ResourcesSection />
 
@@ -150,9 +103,7 @@ export default function Home() {
           key={`${selectedDay ?? "none"}-${sessionNonce}`}
           day={dayProgram}
           open={playerOpen}
-          alreadyCompleted={
-            selectedDay !== null ? completedDays.includes(selectedDay) : false
-          }
+          alreadyCompleted={selectedDay !== null ? isCompleted(selectedDay) : false}
           onClose={handleClosePlayer}
           onComplete={handleComplete}
         />
