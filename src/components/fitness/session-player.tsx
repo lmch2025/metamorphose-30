@@ -30,6 +30,7 @@ import {
 import { fitnessResources } from "@/lib/resources-data";
 import { OptimizedImage } from "@/components/fitness/optimized-image";
 import { DynamicExerciseModel3D } from "@/components/fitness/dynamic-exercise-model-3d";
+import { getExerciseVisual } from "@/lib/exercise-visuals";
 import { useAudioContext } from "@/components/fitness/audio-provider";
 import { AudioControls } from "@/components/fitness/audio-controls";
 import { cn } from "@/lib/utils";
@@ -138,19 +139,34 @@ export function SessionPlayer({
     announcedIdxRef.current = currentIndex;
     announcedHalfwayRef.current = false;
 
+    // Auto-active le mode 3D si l'exercice n'a pas d'image dédiée pertinente
+    // (l'animation 3D dédiée est plus représentative que l'image générique)
+    const visual = getExerciseVisual(current.id);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setView3D(visual.prefer3D);
+
     // Son de transition
     if (currentIndex > 0) {
       audio.play("whoosh");
     }
 
-    // Annonce vocale : nom de l'exercice + première instruction
+    // Annonce vocale COMPLÈTE : nom, description, instructions, conseil, muscles ciblés
     const num = currentIndex + 1;
     const total = exercises.length;
-    const firstInstruction = current.instructions[0] ?? "";
-    const announcement = `Exercice ${num} sur ${total}. ${current.name}. ${firstInstruction}.`;
+    const instructionsText = current.instructions
+      .map((step, i) => `Étape ${i + 1}. ${step}`)
+      .join(". ");
+    const announcement = [
+      `Exercice ${num} sur ${total}.`,
+      current.name,
+      current.description,
+      `Comment faire : ${instructionsText}.`,
+      `Conseil du coach : ${current.tips}`,
+      `Muscles ciblés : ${current.targetMuscles}`,
+    ].join(" ");
     // Petit délai pour laisser le whoosh se terminer
     const timer = setTimeout(() => {
-      audio.say(announcement, { rate: 1.05 });
+      audio.say(announcement, { rate: 1.0 });
     }, currentIndex > 0 ? 350 : 100);
 
     return () => clearTimeout(timer);
@@ -338,7 +354,7 @@ export function SessionPlayer({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 26, stiffness: 280 }}
-            className="relative z-10 flex max-h-[96svh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl glass-strong shadow-2xl"
+            className="relative z-10 flex h-[100dvh] w-full max-w-6xl flex-col overflow-hidden glass-strong sm:h-[94dvh] sm:rounded-3xl"
           >
             {/* En-tête : barre de progression + fermer */}
             <div className="flex items-center gap-3 border-b border-white/5 p-3 sm:p-4">
@@ -470,258 +486,243 @@ export function SessionPlayer({
                     </div>
                   </motion.div>
                 ) : (
+                  /* ====== ÉCRAN EXERCICE — mobile-first, flex-col ====== */
+                  /* Mobile : visuel 65% + infos 35% (scrollable) */
+                  /* Desktop : grid 2 colonnes 50/50 */
                   <motion.div
                     key={`ex-${currentIndex}`}
-                    initial={{ opacity: 0, x: 30 }}
+                    initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.3 }}
-                    className="grid gap-0 lg:grid-cols-2"
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex h-full flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1"
                   >
-                    {/* Colonne visuel + timer (image OU modèle 3D) */}
-                    <div className="relative flex flex-col">
-                      <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-auto lg:h-full">
-                        {/* Soit l'image, soit le modèle 3D */}
-                        {view3D ? (
-                          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 to-background">
-                            <DynamicExerciseModel3D
-                              exerciseId={current.id}
-                              className="absolute inset-0 h-full w-full"
-                              autoRotate
-                            />
-                            {/* Bandeau aide 3D */}
-                            <div className="pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 rounded-full bg-background/60 px-3 py-1 text-[10px] text-muted-foreground backdrop-blur-sm">
-                              Glissez pour pivoter · molette pour zoomer
-                            </div>
-                          </div>
-                        ) : (
-                          <OptimizedImage
-                            name={current.image ?? "ambient-tone"}
-                            alt={current.name}
-                            eager
-                            wrapperClassName="absolute inset-0 h-full w-full"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-
-                        {/* Badge catégorie */}
-                        <div className="absolute left-4 top-4">
-                          <Badge
-                            className={cn(
-                              "glass border-white/15 bg-gradient-to-br",
-                              catMeta.bg,
-                              catMeta.color,
-                            )}
-                          >
-                            <catMeta.icon className="mr-1.5 h-3.5 w-3.5" />
-                            {catMeta.label}
-                          </Badge>
-                        </div>
-
-                        {/* Toggle Image / 3D */}
-                        <div className="absolute right-4 top-4 z-10 flex gap-1 rounded-lg glass-strong p-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setView3D(false);
-                              audio.play("ui-click");
-                            }}
-                            className={cn(
-                              "flex h-7 w-7 items-center justify-center rounded-md transition-all",
-                              !view3D
-                                ? "bg-amber-500/20 text-amber-300"
-                                : "text-muted-foreground hover:text-foreground",
-                            )}
-                            aria-label="Vue image"
-                            aria-pressed={!view3D}
-                          >
-                            <ImageIcon className="h-3.5 w-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setView3D(true);
-                              audio.play("unlock");
-                            }}
-                            className={cn(
-                              "flex h-7 w-7 items-center justify-center rounded-md transition-all",
-                              view3D
-                                ? "bg-amber-500/20 text-amber-300"
-                                : "text-muted-foreground hover:text-foreground",
-                            )}
-                            aria-label="Vue 3D"
-                            aria-pressed={view3D}
-                          >
-                            <Box className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-
-                        {/* Timer géant en bas de l'image */}
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
-                          <motion.div
-                            key={timeLeft}
-                            initial={{ scale: 0.9, opacity: 0.6 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="text-5xl font-bold tabular-nums text-foreground drop-shadow-lg sm:text-6xl"
-                          >
-                            {formatTime(timeLeft)}
-                          </motion.div>
-                          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                            {isPlaying ? "en cours" : "en pause"}
-                          </div>
-                        </div>
-
-                        {/* Barre de progression de l'exercice */}
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-amber-400 to-rose-500"
-                            initial={{ width: "0%" }}
-                            animate={{
-                              width: `${
-                                current.duration > 0
-                                  ? ((current.duration - timeLeft) /
-                                      current.duration) *
-                                    100
-                                  : 0
-                              }%`,
-                            }}
-                            transition={{ duration: 0.5 }}
+                    {/* ----- ZONE VISUELLE (grande sur mobile : 65%) ----- */}
+                    <div className="relative h-[65%] min-h-0 shrink-0 overflow-hidden sm:h-full sm:shrink">
+                      {view3D ? (
+                        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 to-background">
+                          <DynamicExerciseModel3D
+                            exerciseId={current.id}
+                            className="absolute inset-0 h-full w-full"
+                            autoRotate
                           />
                         </div>
+                      ) : (
+                        <OptimizedImage
+                          name={getExerciseVisual(current.id).image}
+                          alt={current.name}
+                          eager
+                          wrapperClassName="absolute inset-0 h-full w-full"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/20" />
+
+                      {/* Badge catégorie */}
+                      <div className="absolute left-3 top-3 sm:left-4 sm:top-4">
+                        <Badge
+                          className={cn(
+                            "glass border-white/15 bg-gradient-to-br text-[10px] sm:text-xs",
+                            catMeta.bg,
+                            catMeta.color,
+                          )}
+                        >
+                          <catMeta.icon className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                          {catMeta.label}
+                        </Badge>
+                      </div>
+
+                      {/* Toggle Image / 3D — tactile-friendly */}
+                      <div className="absolute right-3 top-3 z-10 flex gap-0.5 rounded-lg glass-strong p-0.5 sm:right-4 sm:top-4 sm:gap-1 sm:p-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setView3D(false);
+                            audio.play("ui-click");
+                          }}
+                          className={cn(
+                            "flex h-8 w-8 items-center justify-center rounded-md transition-all sm:h-7 sm:w-7",
+                            !view3D
+                              ? "bg-amber-500/20 text-amber-300"
+                              : "text-muted-foreground hover:text-foreground",
+                          )}
+                          aria-label="Vue image"
+                          aria-pressed={!view3D}
+                        >
+                          <ImageIcon className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setView3D(true);
+                            audio.play("unlock");
+                          }}
+                          className={cn(
+                            "flex h-8 w-8 items-center justify-center rounded-md transition-all sm:h-7 sm:w-7",
+                            view3D
+                              ? "bg-amber-500/20 text-amber-300"
+                              : "text-muted-foreground hover:text-foreground",
+                          )}
+                          aria-label="Vue 3D"
+                          aria-pressed={view3D}
+                        >
+                          <Box className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+
+                      {/* Timer géant */}
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-center sm:bottom-4">
+                        <motion.div
+                          key={timeLeft}
+                          initial={{ scale: 0.9, opacity: 0.6 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className="text-4xl font-bold tabular-nums text-foreground drop-shadow-lg sm:text-6xl"
+                        >
+                          {formatTime(timeLeft)}
+                        </motion.div>
+                        <div className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-[10px]">
+                          {isPlaying ? "en cours" : "en pause"}
+                        </div>
+                      </div>
+
+                      {/* Barre progression exercice */}
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-amber-400 to-rose-500"
+                          initial={{ width: "0%" }}
+                          animate={{
+                            width: `${
+                              current.duration > 0
+                                ? ((current.duration - timeLeft) /
+                                    current.duration) *
+                                  100
+                                : 0
+                            }%`,
+                          }}
+                          transition={{ duration: 0.5 }}
+                        />
                       </div>
                     </div>
 
-                    {/* Colonne infos */}
-                    <div className="flex flex-col gap-4 p-5 sm:p-6">
-                      <div>
-                        <div className="mb-1 text-xs uppercase tracking-widest text-muted-foreground">
-                          Exercice {currentIndex + 1} / {exercises.length}
+                    {/* ----- COLONNE INFOS (35% sur mobile, 50% sur desktop) ----- */}
+                    <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3 sm:flex-none sm:gap-3 sm:p-4">
+                      {/* Titre + méta compact */}
+                      <div className="shrink-0">
+                        <div className="mb-0.5 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                          Ex {currentIndex + 1}/{exercises.length} · {current.duration}s · 🎯 {current.targetMuscles}
                         </div>
-                        <h3 className="text-2xl font-bold text-foreground sm:text-3xl">
+                        <h3 className="text-lg font-bold leading-tight text-foreground sm:text-2xl">
                           {current.name}
                         </h3>
-                        <p className="mt-2 text-sm text-muted-foreground">
+                        <p className="mt-1 text-[11px] text-muted-foreground sm:text-sm">
                           {current.description}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs">
-                        <span className="rounded-md bg-white/5 px-2 py-1 text-muted-foreground">
-                          {current.duration}s
-                        </span>
-                        <span className="rounded-md bg-white/5 px-2 py-1 text-muted-foreground">
-                          🎯 {current.targetMuscles}
-                        </span>
-                      </div>
-
-                      {/* Instructions */}
-                      <div className="space-y-2">
-                        <div className="text-xs font-semibold uppercase tracking-widest text-amber-200">
+                      {/* Instructions en grille 2 colonnes (compact) */}
+                      <div className="min-h-0 flex-1">
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-amber-200 sm:text-xs">
                           Comment faire
                         </div>
-                        <ol className="space-y-1.5">
+                        <ol className="grid grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-1.5">
                           {current.instructions.map((step, i) => (
                             <li
                               key={i}
-                              className="flex gap-2.5 text-sm text-foreground/90"
+                              className="flex gap-1.5 text-[11px] text-foreground/90 sm:text-xs"
                             >
-                              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-[10px] font-bold text-amber-300">
+                              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-[9px] font-bold text-amber-300 sm:h-5 sm:w-5 sm:text-[10px]">
                                 {i + 1}
                               </span>
                               <span className="pt-0.5">{step}</span>
                             </li>
                           ))}
                         </ol>
-                      </div>
 
-                      {/* Conseil */}
-                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
-                        <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-300">
-                          <Sparkles className="h-3 w-3" />
-                          Conseil du coach
+                        {/* Conseil */}
+                        <div className="mt-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2 sm:p-2.5">
+                          <div className="mb-0.5 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-300 sm:text-xs">
+                            <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                            Conseil du coach
+                          </div>
+                          <p className="text-[11px] text-foreground/90 sm:text-xs">
+                            {current.tips}
+                          </p>
                         </div>
-                        <p className="text-sm text-foreground/90">
-                          {current.tips}
-                        </p>
-                      </div>
 
-                      {/* Lien ressource 3D */}
-                      {resource && (
-                        <a
-                          href={resource.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 transition-all hover:border-amber-500/30 hover:bg-amber-500/5"
-                        >
-                          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15">
-                            <ExternalLink className="h-4 w-4 text-amber-300" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="text-xs font-semibold text-foreground">
-                              Voir en 3D : {resource.name}
+                        {/* Lien ressource externe */}
+                        {resource && (
+                          <a
+                            href={resource.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-2 transition-all hover:border-amber-500/30 hover:bg-amber-500/5"
+                          >
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/15">
+                              <ExternalLink className="h-3.5 w-3.5 text-amber-300" />
                             </div>
-                            <div className="truncate text-[11px] text-muted-foreground">
-                              {resource.bestFor}
+                            <div className="min-w-0 flex-1">
+                              <div className="truncate text-[11px] font-semibold text-foreground">
+                                Voir en 3D : {resource.name}
+                              </div>
+                              <div className="truncate text-[10px] text-muted-foreground">
+                                {resource.bestFor}
+                              </div>
                             </div>
-                          </div>
-                          <ExternalLink className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                        </a>
-                      )}
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Barre de contrôles */}
+            {/* ====== BARRE DE CONTRÔLES (mobile-first, sur une ligne) ====== */}
             {!sessionComplete && (
-              <div className="border-t border-white/5 bg-background/40 p-3 sm:p-4">
-                <div className="flex items-center justify-center gap-3 sm:gap-4">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => goTo(currentIndex - 1)}
-                    disabled={currentIndex === 0}
-                    className="h-11 w-11 text-muted-foreground hover:bg-white/10 hover:text-foreground disabled:opacity-30"
-                    aria-label="Exercice précédent"
-                  >
-                    <SkipBack className="h-5 w-5" />
-                  </Button>
+              <div className="flex shrink-0 items-center justify-center gap-2 border-t border-white/5 bg-background/40 px-3 py-2 sm:gap-4 sm:px-4 sm:py-2.5">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => goTo(currentIndex - 1)}
+                  disabled={currentIndex === 0}
+                  className="h-9 w-9 text-muted-foreground hover:bg-white/10 hover:text-foreground disabled:opacity-30 sm:h-11 sm:w-11"
+                  aria-label="Exercice précédent"
+                >
+                  <SkipBack className="h-4 w-4 sm:h-5 sm:w-5" />
+                </Button>
 
-                  <Button
-                    size="icon"
-                    onClick={handlePlayPause}
-                    className="h-14 w-14 rounded-full bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30 hover:scale-105 transition-transform"
-                    aria-label={isPlaying ? "Pause" : "Lecture"}
-                  >
-                    {isPlaying ? (
-                      <Pause className="h-6 w-6" />
-                    ) : (
-                      <Play className="ml-0.5 h-6 w-6" />
-                    )}
-                  </Button>
+                <Button
+                  size="icon"
+                  onClick={handlePlayPause}
+                  className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/30 hover:scale-105 transition-transform sm:h-14 sm:w-14"
+                  aria-label={isPlaying ? "Pause" : "Lecture"}
+                >
+                  {isPlaying ? (
+                    <Pause className="h-5 w-5 sm:h-6 sm:w-6" />
+                  ) : (
+                    <Play className="ml-0.5 h-5 w-5 sm:h-6 sm:w-6" />
+                  )}
+                </Button>
 
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => {
-                      if (currentIndex === exercises.length - 1) {
-                        setSessionComplete(true);
-                        setIsPlaying(false);
-                        setTimeout(() => audio.play("fanfare-celebrate"), 200);
-                      } else {
-                        goTo(currentIndex + 1);
-                      }
-                    }}
-                    className="h-11 w-11 text-muted-foreground hover:bg-white/10 hover:text-foreground"
-                    aria-label="Exercice suivant"
-                  >
-                    <SkipForward className="h-5 w-5" />
-                  </Button>
-                </div>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => {
+                    if (currentIndex === exercises.length - 1) {
+                      setSessionComplete(true);
+                      setIsPlaying(false);
+                      setTimeout(() => audio.play("fanfare-celebrate"), 200);
+                    } else {
+                      goTo(currentIndex + 1);
+                    }
+                  }}
+                  className="h-9 w-9 text-muted-foreground hover:bg-white/10 hover:text-foreground sm:h-11 sm:w-11"
+                  aria-label="Exercice suivant"
+                >
+                  <SkipForward className="h-4 w-4 sm:h-5 sm:w-5" />
+                </Button>
 
-                {/* Liste des exercices en mini-puces */}
-                <div className="mt-3 flex items-center justify-center gap-1.5">
+                {/* Mini-puces exercices (à droite, sur la même ligne) */}
+                <div className="ml-2 flex items-center gap-1 sm:ml-4 sm:gap-1.5">
                   {exercises.map((ex, i) => (
                     <button
                       key={i}
@@ -729,7 +730,7 @@ export function SessionPlayer({
                       className={cn(
                         "h-1.5 rounded-full transition-all",
                         i === currentIndex
-                          ? "w-6 bg-amber-400"
+                          ? "w-4 bg-amber-400 sm:w-6"
                           : i < currentIndex
                             ? "w-1.5 bg-emerald-400"
                             : "w-1.5 bg-white/15 hover:bg-white/30",
